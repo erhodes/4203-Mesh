@@ -19,13 +19,13 @@ int main(){
         }
         else if (i == 1){
             cout << "Send Mode" << endl;
-            MySend();
+            MySend("oomph!");
         }
         else if (i = 2){
             string message, sender;
             cout << "Recieve Mode" << endl;
             Receive(&sender, &message);
-            cout << "Recieved" << message << " from " << sender << endl;
+            cout << "Recieved " << message << " from " << sender << endl;
             neighbours.beaconRecieved(sender);
             neighbours.printTable();
         }

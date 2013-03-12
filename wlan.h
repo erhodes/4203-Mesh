@@ -69,4 +69,4 @@ static int sscanf6(char *str, int *a1, int *a2, int *a3, int *a4, int *a5, int *
 Outcome init();
 void Receive(string *sender, string *message);
 void shutdown();
-Outcome MySend();
+Outcome MySend(string message);

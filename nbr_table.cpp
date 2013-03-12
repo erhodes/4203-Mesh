@@ -20,11 +20,6 @@ void nbr_table::beaconRecieved(string senderAddress){
             return;
         }
     }
-    //if the program makes it here, we need to add a new entry
-    //first check to see if the table is "full"
-    if (entries.size()>=MAX_SIZE){
-        return;
-    }
     nbr_entry temp(senderAddress);
     entries.push_back(temp);
 }

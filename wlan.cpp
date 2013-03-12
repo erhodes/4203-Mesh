@@ -223,7 +223,7 @@ void shutdown()
 }
 
 
-Outcome MySend() 
+Outcome MySend(string message)
 { 
    // send buffer size
    # define BUFFSIZE 256
@@ -235,7 +235,8 @@ Outcome MySend()
    // destination address (binary)
    WLANAddr daddr;
    // data
-   char dp[] = "hello"; 
+   int message_size = message.length()+1;
+ //  char* dp = message.c_str();
 
    // convert destination address from ASCII to binary
    daddr.str2wlan(rp);
@@ -253,7 +254,7 @@ Outcome MySend()
    memmove(buff, &hdr, WLAN_HEADER_LEN);
 
    // store the payload
-   memmove(buff+WLAN_HEADER_LEN, dp, strlen(dp)+1);
+   memmove(buff+WLAN_HEADER_LEN, message.c_str(), message_size);
 
    // set the "to address"
    struct sockaddr_ll to = {0};
@@ -265,7 +266,7 @@ Outcome MySend()
 
    // send a frame
    int sentlen = sendto(
-      ifconfig.sockid, buff, WLAN_HEADER_LEN+strlen(dp)+1, 0, 
+      ifconfig.sockid, buff, WLAN_HEADER_LEN+message_size, 0,
       (sockaddr *) &to, tolen);
 
    if (sentlen == -1 ) 

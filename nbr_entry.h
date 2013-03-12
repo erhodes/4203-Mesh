@@ -22,8 +22,8 @@ public:
     bool getArrival() { return arrival; }
 
 protected:
-    string address;
-    int last_recorded;
+    string address, next_hop;
+    int last_recorded, hops;
     bool arrival;
 };
 
