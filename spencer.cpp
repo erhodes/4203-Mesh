@@ -2,9 +2,19 @@
 
 
 
+/*
+Packet format:
 
+Space Delimited
+
+Type: <Message/RoutingVector>
+Date-Time-Stamp: 
+
+
+*/
 
 void messageReceived(string messageData){
+
     if(data is a message){
         // check who it is for
         // If it is me then yay
@@ -14,4 +24,5 @@ void messageReceived(string messageData){
         // tell the neighbours about our routing table by constructing
         // a vector of the shortest paths
     }
+
 }
