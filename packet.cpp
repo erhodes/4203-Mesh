@@ -29,6 +29,7 @@ Packet::Packet(PacketType typeParam, int lifeTimeParam, int packetNumberParam,  
 
 	payload = payloadParam;
 
+
 }
 
 Packet::Packet(string packetData){
@@ -69,6 +70,53 @@ string Packet::getPayload() const{
 
 string Packet::toString() const{
 	// Serialize this object for the network
+
+	string delimiter = "\n";
+	stringstream serialization;
+	
+	if(getType() == Invalid){
+		serialization << "Invalid";
+	}else if(getType() == Message){
+		serialization << "Message";
+	}else if(getType() == RoutingVector){
+		serialization << "RoutingVector";
+	}
+
+	serialization << delimiter;
+
+	time_t localtime;
+	struct tm *nowtm;
+	char tmbuf[64], buf[64];
+
+	localtime = localtime(&timeSent.tv_sec);
+	strftime(tmbuf, sizeof tmbuf, "%Y-%m-%d %H:%M:%S", nowtm);
+	snprintf(buf, sizeof buf, "%s.%06d", tmbuf, timeSent.tv_usec);	
+
+	string timeString (buf);
+
+	serialization << timeString;
+
+	serialization << delimiter;
+
+	serialization << getLifeTime(); 
+
+	serialization << delimiter;
+
+	serialization << getPacketNumber();
+
+	serialization << delimiter;
+	
+	serialization << getSourceAddress();
+
+	serialization << delimiter;
+
+	serialization << getDestinationAddress();
+
+	serialization << delimeter;
+
+	serialization << getPayload();
+
+	return serialization.str();
 }
 
 

@@ -1,4 +1,5 @@
 
+#include <string>
 #include <time.h>
 
 /*
@@ -14,6 +15,8 @@ typedef struct PacketType{
 	RoutingVector
 } PacketType;
 
+
+using namespace std;
 
 
 class Packet{
@@ -48,7 +51,8 @@ class Packet{
 		void setDestinationAddress(string newDestinationAddress);
 		// Sets the payload of this packet
 		void setPayload(string newPayload);
-		
+	
+		int getLifeTime() const;		
 	public:
 		Packet(PacketType typeParam, int lifeTimeParam, int packetNumberParam, string sourceAddressParam, string destinationAddressParam, string payloadParam);
 		// Constructs a packet object from raw packet data
