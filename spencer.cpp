@@ -12,7 +12,7 @@ Date-Time-Stamp:
 
 
 */
-
+/*
 void messageReceived(string messageData){
 
     if(data is a message){
@@ -26,3 +26,5 @@ void messageReceived(string messageData){
     }
 
 }
+
+*/

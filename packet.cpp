@@ -154,4 +154,6 @@ void Packet::setHopCount(int newHopCount){
 	hopCount = newHopCount;
 }
 
-
+int Packet::getLifeTime() const{
+	return lifeTime;
+}
