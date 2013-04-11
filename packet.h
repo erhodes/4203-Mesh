@@ -52,7 +52,7 @@ class Packet{
 		// Sets the number of hops this packet has made
 		void setHopCount(int newHopCount);	
 	public:
-		Packet(int lifeTimeParam, int packetNumberParam, string sourceAddressParam, string destinationAddressParam, string payloadParam);
+		Packet(int lifeTimeParam, int hopCountParam, int packetNumberParam, string sourceAddressParam, string destinationAddressParam, string payloadParam);
 		// Constructs a packet object from raw packet data
 		Packet(string packetData);
 		// Gets the type of this packet

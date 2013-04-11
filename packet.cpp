@@ -11,12 +11,14 @@
 // destinationAddress - The destination address of the packet
 // payload - The payload of the packet
 
-Packet::Packet( int lifeTimeParam, int packetNumberParam,  string sourceAddressParam, string destinationAddressParam, string payloadParam){
+Packet::Packet( int lifeTimeParam, int hopCountParam, int packetNumberParam,  string sourceAddressParam, string destinationAddressParam, string payloadParam){
 
 	time_t tempTime;
 	time(&tempTime);
 
 	setTimeSent(tempTime);
+
+	setHopCount(hopCountParam);
 
 	lifeTime = lifeTimeParam;
 	
