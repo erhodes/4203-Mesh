@@ -1,7 +1,7 @@
 
 #include <string>
 #include <time.h>
-
+#include <iostream>
 #include <sstream>
 /*
 	There are two types of packets

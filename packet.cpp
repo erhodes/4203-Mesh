@@ -35,11 +35,26 @@ Packet::Packet( int lifeTimeParam, int packetNumberParam,  string sourceAddressP
 Packet::Packet(string packetData){
 // Parse the packet into the object
 
+	stringstream deserializer; 
+
+	string type;
+
+	deserializer >> type;
+
+	string time;
+
+	deserializer >> time;
+
+	//tm * date = getdate(time.c_str());
+	//time_t packetTime = mktime(date);
+	cout << "TIME: " << time << "\n";
+
+
 }
 
 // Returns the type of packet represented by this object
 string Packet::getType() const{
-	return string("BASE");
+	return string("Packet");
 }
 
 
@@ -85,6 +100,7 @@ string Packet::toString() const{
 	// Serialize this object for the network
 
 	string delimiter = "\n";
+
 	stringstream serialization;
 	
 	serialization << getType();
@@ -92,12 +108,12 @@ string Packet::toString() const{
 	serialization << delimiter;
 
 	struct tm *nowtm;
-	char tmbuf[64], buf[64];
+	char tmbuf[64] ;
 	
 	nowtm = localtime(&timeSent);
 	strftime(tmbuf, sizeof tmbuf, "%Y-%m-%d %H:%M:%S", nowtm);
 	
-	string timeString (buf);
+	string timeString (tmbuf);
 
 	serialization << timeString;
 
@@ -108,6 +124,10 @@ string Packet::toString() const{
 	serialization << delimiter;
 
 	serialization << getPacketNumber();
+
+	serialization << delimiter;
+
+	serialization << getHopCount();
 
 	serialization << delimiter;
 	
