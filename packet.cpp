@@ -35,21 +35,60 @@ Packet::Packet( int lifeTimeParam, int packetNumberParam,  string sourceAddressP
 Packet::Packet(string packetData){
 // Parse the packet into the object
 
-	stringstream deserializer; 
+	stringstream deserializer(packetData); 
 
 	string type;
 
 	deserializer >> type;
+	
+	string d;
+	string t;
+	string dateTime;
 
-	string time;
+	deserializer >> d;
+	deserializer >> t;
+	
+	stringstream dateTimeStream;
+	dateTimeStream << d << " " << t;
+	dateTime = dateTimeStream.str(); 
 
-	deserializer >> time;
+	const char * timeBuffer =dateTime.c_str();
 
-	//tm * date = getdate(time.c_str());
-	//time_t packetTime = mktime(date);
-	cout << "TIME: " << time << "\n";
+	tm date;
+	strptime(timeBuffer, "%Y-%m-%d %H:%M:%S", &date);	
+	
 
+	time_t packetTime = mktime(&date);
+	setTimeSent(packetTime);
+	
+	int life;
+	deserializer >> life;
+	setLifeTime(life);
 
+	int pno;
+	deserializer >> pno;	
+	setPacketNumber(pno);
+	
+	int hop;
+	deserializer >> hop;
+	setHopCount(hop);
+
+	string src;
+	deserializer >> src;
+	setSourceAddress(src);
+	
+	string dest;
+	deserializer >> dest;
+	setDestinationAddress(dest);
+
+	stringstream payloadStream;
+	payloadStream << deserializer.rdbuf();
+	
+	string pay = payloadStream.str();
+	pay = pay.substr(1, pay.length());
+	setPayload(pay);	
+
+	
 }
 
 // Returns the type of packet represented by this object
@@ -185,7 +224,12 @@ void Packet::setPayload(string newPayload){
 void Packet::setHopCount(int newHopCount){
 	hopCount = newHopCount;
 }
+// Sets the lifetime of this packet
+void Packet::setLifeTime(int newLifeTime){
+	lifeTime = newLifeTime;
+}
 
+// Returns the lifetime of this packet
 int Packet::getLifeTime() const{
 	return lifeTime;
 }
