@@ -1,7 +1,7 @@
 
 #include <string>
 #include <time.h>
-
+#include <sstream>
 /*
 	There are two types of packets
 	Message - Contains the message payload sent from the next layer in the network stack
@@ -9,22 +9,19 @@
 
 */
 
-typedef struct PacketType{
-	Invalid,
-	Message,
-	RoutingVector
-} PacketType;
 
+#ifndef INCLUDE_PACKET
+
+#define INCLUDE_PACKET
 
 using namespace std;
 
 
+
 class Packet{
 	private:
-		// The type of packet which this object represents	
-		PacketType type;
 		// The date and time on which this packet was sent
-		struct timeval timeSent;
+		time_t timeSent;
 		// The lifetime of the packet in milliseconds
 		int lifeTime;
 		// The number of the packet
@@ -33,14 +30,13 @@ class Packet{
 		string sourceAddress;
 		// The address of the destination of this packet
 		string destinationAddress;
-
+		// The number of hops that this packet has made
+		int hopCount;
 		// Payload of the packet itself
 		string payload;
 
-		// Sets what type of packet is represented by this object
-		void setType(PacketType newType);
 		// Sets the time at which this packet was sent
-		void setTimeSent(timeval newTimeSent);
+		void setTimeSent(time_t newTimeSent);
 		// Sets the number of milliseconds a packet is good for before expiry
 		void setLifeTime(int newLifeTime);
 		// Sets the number of this packet
@@ -51,14 +47,16 @@ class Packet{
 		void setDestinationAddress(string newDestinationAddress);
 		// Sets the payload of this packet
 		void setPayload(string newPayload);
-	
-		int getLifeTime() const;		
+		// Gets the liftime of this packet in seconds
+		int getLifeTime() const;
+		// Sets the number of hops this packet has made
+		void setHopCount(int newHopCount);	
 	public:
-		Packet(PacketType typeParam, int lifeTimeParam, int packetNumberParam, string sourceAddressParam, string destinationAddressParam, string payloadParam);
+		Packet(int lifeTimeParam, int packetNumberParam, string sourceAddressParam, string destinationAddressParam, string payloadParam);
 		// Constructs a packet object from raw packet data
 		Packet(string packetData);
 		// Gets the type of this packet
-		PacketType getType() const;
+		virtual string getType() const;
 		// Gets whether or not this packet is expired according to the time of expiry
 		bool isExpired() const;
 		// Gets the number of this packet
@@ -71,4 +69,8 @@ class Packet{
 		string getPayload() const;
 		// Constructs a string representation of this object
 		string toString() const;
-}
+		// Get the number of hops that this packet has made
+		int  getHopCount() const;
+};
+
+#endif

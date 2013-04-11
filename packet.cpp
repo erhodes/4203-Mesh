@@ -11,13 +11,12 @@
 // destinationAddress - The destination address of the packet
 // payload - The payload of the packet
 
-Packet::Packet(PacketType typeParam, int lifeTimeParam, int packetNumberParam,  string sourceAddressParam, string destinationAddressParam, string payloadParam){
-
-	type = typeParam;
+Packet::Packet( int lifeTimeParam, int packetNumberParam,  string sourceAddressParam, string destinationAddressParam, string payloadParam){
 
 	time_t tempTime;
 	time(&tempTime);
-	timeSent = localtime(&tempTime);
+
+	setTimeSent(tempTime);
 
 	lifeTime = lifeTimeParam;
 	
@@ -29,7 +28,6 @@ Packet::Packet(PacketType typeParam, int lifeTimeParam, int packetNumberParam,  
 
 	payload = payloadParam;
 
-
 }
 
 Packet::Packet(string packetData){
@@ -38,8 +36,8 @@ Packet::Packet(string packetData){
 }
 
 // Returns the type of packet represented by this object
-PacketType Packet::getType() const{
-	return type;
+string Packet::getType() const{
+	return string("BASE");
 }
 
 
@@ -68,30 +66,28 @@ string Packet::getPayload() const{
 	return payload;
 }
 
+// Returns the number of hops that this packet has made
+int Packet::getHopCount() const{
+	return hopCount;
+}
+
+
 string Packet::toString() const{
 	// Serialize this object for the network
 
 	string delimiter = "\n";
 	stringstream serialization;
 	
-	if(getType() == Invalid){
-		serialization << "Invalid";
-	}else if(getType() == Message){
-		serialization << "Message";
-	}else if(getType() == RoutingVector){
-		serialization << "RoutingVector";
-	}
+	serialization << getType();
 
 	serialization << delimiter;
 
-	time_t localtime;
 	struct tm *nowtm;
 	char tmbuf[64], buf[64];
-
-	localtime = localtime(&timeSent.tv_sec);
+	
+	nowtm = localtime(&timeSent);
 	strftime(tmbuf, sizeof tmbuf, "%Y-%m-%d %H:%M:%S", nowtm);
-	snprintf(buf, sizeof buf, "%s.%06d", tmbuf, timeSent.tv_usec);	
-
+	
 	string timeString (buf);
 
 	serialization << timeString;
@@ -112,7 +108,7 @@ string Packet::toString() const{
 
 	serialization << getDestinationAddress();
 
-	serialization << delimeter;
+	serialization << delimiter;
 
 	serialization << getPayload();
 
@@ -127,19 +123,10 @@ string Packet::toString() const{
 */
 
 
-// Sets what type of packet is represented by this object
-void Packet::setType(PacketType newType){
-	type = newType;
-}
 
 // Sets the time at which this packet was sent
-void Packet::setTimeSent(tm * newTimeSent){
+void Packet::setTimeSent(time_t  newTimeSent){
 	timeSent = newTimeSent;
-}
-
-// Sets the number of milliseconds a packet is good for before expiry
-void Packet::setTimeOfExpiry(int newLifeTime){
-	lifeTime = newLifeTime;
 }
 
 // Sets the number of this packet
@@ -160,6 +147,11 @@ void Packet::setDestinationAddress(string newDestinationAddress){
 // Sets the payload of this packet
 void Packet::setPayload(string newPayload){
 	payload = newPayload;
+}
+
+// Sets the hop count of this packet
+void Packet::setHopCount(int newHopCount){
+	hopCount = newHopCount;
 }
 
 
