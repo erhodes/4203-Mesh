@@ -1,6 +1,7 @@
 
 #include <string>
 #include <time.h>
+
 #include <sstream>
 /*
 	There are two types of packets
@@ -9,14 +10,11 @@
 
 */
 
-
 #ifndef INCLUDE_PACKET
 
 #define INCLUDE_PACKET
 
 using namespace std;
-
-
 
 class Packet{
 	private:
@@ -34,7 +32,6 @@ class Packet{
 		int hopCount;
 		// Payload of the packet itself
 		string payload;
-
 		// Sets the time at which this packet was sent
 		void setTimeSent(time_t newTimeSent);
 		// Sets the number of milliseconds a packet is good for before expiry
@@ -52,7 +49,7 @@ class Packet{
 		// Sets the number of hops this packet has made
 		void setHopCount(int newHopCount);	
 	public:
-		Packet(int lifeTimeParam, int hopCountParam, int packetNumberParam, string sourceAddressParam, string destinationAddressParam, string payloadParam);
+		Packet(int lifeTimeParam, int packetNumberParam, string sourceAddressParam, string destinationAddressParam, string payloadParam);
 		// Constructs a packet object from raw packet data
 		Packet(string packetData);
 		// Gets the type of this packet
@@ -67,6 +64,8 @@ class Packet{
 		string getDestinationAddress() const;
 		// Gets the payload contained within this packet
 		string getPayload() const;
+		// Gets the time at which this packet was sent
+		time_t getTimeSent() const;
 		// Constructs a string representation of this object
 		string toString() const;
 		// Get the number of hops that this packet has made

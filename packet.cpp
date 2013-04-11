@@ -11,14 +11,14 @@
 // destinationAddress - The destination address of the packet
 // payload - The payload of the packet
 
-Packet::Packet( int lifeTimeParam, int hopCountParam, int packetNumberParam,  string sourceAddressParam, string destinationAddressParam, string payloadParam){
+Packet::Packet( int lifeTimeParam, int packetNumberParam,  string sourceAddressParam, string destinationAddressParam, string payloadParam){
 
 	time_t tempTime;
 	time(&tempTime);
 
 	setTimeSent(tempTime);
 
-	setHopCount(hopCountParam);
+	setHopCount(0);
 
 	lifeTime = lifeTimeParam;
 	
@@ -45,7 +45,14 @@ string Packet::getType() const{
 
 // Returns whether or not this packet is expired by looking at the associated time of expiry
 bool Packet::isExpired() const{
-	// Complicated
+	time_t now;
+	time_t then = getTimeSent();
+	time(&now);
+	double difference=difftime(now, then);
+	if(difference > getLifeTime()){
+		return true;
+	}
+	return false;
 }
 
 // Returns the number of the packet represented by this object
@@ -117,6 +124,9 @@ string Packet::toString() const{
 	return serialization.str();
 }
 
+time_t Packet::getTimeSent() const{
+	return timeSent;
+}
 
 
 /*
