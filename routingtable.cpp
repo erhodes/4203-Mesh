@@ -1,12 +1,8 @@
 #include "routingtable.h"
 
-RoutingTable::RoutingTable()
-{
-    map<string,int>* a1 = new map <string,int>;
-    a1->insert(std::pair<string,int>("a",12));
-    table["a"] = a1;
-    map<string, int>* temp = table["a"];
-    temp->insert(std::pair<string,int>("test",13));
+
+RoutingTable::RoutingTable(){
+
 }
 
 void RoutingTable::newRoute(string destination, string direction, int distance){

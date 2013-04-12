@@ -3,7 +3,7 @@
 #include "routing_packet.h"
 #include "packet_factory.h"
 #include "dvrp_network_layer_delegate.h"
-
+#include "routingtable.h"
 
 /*
 	The purpose of this class is to manage the DVRP network layer
@@ -27,12 +27,13 @@ public:
 
 	void setDelegate(DVRPNetworkLayerDelegate *);
 
+	void messageReceived(string sourceAddress, string destinationAddress, string data);
 
 private:
 
 	DVRPNetworkLayerDelegate * delegate;
 
-
+	RoutingTable * routingTable;
 };
 
 

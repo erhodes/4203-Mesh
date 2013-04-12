@@ -80,6 +80,7 @@ void ExampleChat::handleSendMessage(){
 
 void  ExampleChat::initNetworkLayer(){
 	networkLayer = new DVRPNetworkLayer();
+	networkLayer->setDelegate(this);
 	
 }
 
