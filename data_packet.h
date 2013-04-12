@@ -5,7 +5,8 @@
 
 	The DataPacket class was created so that data could be sent through the mesh
 	network regardless of the topology. There needed to be a way to seperate
-	network control packets from the actual data packets themselves.
+	network control packets from the actual data packets themselves. Therefore
+	RoutingPackets and DataPackets were formed.
 
 */
 

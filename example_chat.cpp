@@ -65,13 +65,20 @@ int ExampleChat::validateAddress(int address){
 	return 0;	
 }
 
+
+string ExampleChat::lookupAddress(int addressIndex){
+
+
+}
+
+
 void ExampleChat::handleSendMessage(){
 	displayAddressRequestMessage();
 	int address =getUserSelection();
 	if(validateAddress(address) == 0){ // Success
 		displayMessageRequestMessage();
 		string message = getUserString();
-		// Send the message
+		networkLayer->sendData(lookupAddress(address), message);
 	}else{
 		cout << "The address you entered does not appear to be that of a chatter, please try again later\n";
 	}

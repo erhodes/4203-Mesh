@@ -4,9 +4,12 @@
 #include <iostream>
 #include <sstream>
 /*
-	There are two types of packets
-	Message - Contains the message payload sent from the next layer in the network stack
-	RoutingVector - Contains information specific to maintaining the distance vector routing table
+	There are two types of packets:
+
+	DataPacket - Contains the message payload sent from the next layer in the network stack
+	RoutingPacket - Contains information specific to maintaining the distance vector routing table
+
+	Each of those types of packets are represented using subclasses of this class because they are both packets
 
 */
 
