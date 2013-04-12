@@ -3,6 +3,11 @@
 #include "routing_packet.h"
 #include <iostream>
 
+#ifndef INCLUDE_PACKET_FACTORY
+#define INCLUDE_PACKET_FACTORY
+
+
+
 class PacketFactory {
 	public:
 	PacketFactory & getFactory();
@@ -11,4 +16,4 @@ class PacketFactory {
 
 };
 
-
+#endif
