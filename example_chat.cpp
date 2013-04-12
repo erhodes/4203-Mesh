@@ -84,7 +84,10 @@ void  ExampleChat::initNetworkLayer(){
 	
 }
 
+// Delegate method that gets called when data is received
 void ExampleChat::dataReceived(string source, string data){
+
+	cout << "Message Received From (" << source << "): " << data << "\n";
 
 }
 

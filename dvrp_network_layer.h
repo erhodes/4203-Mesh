@@ -31,6 +31,8 @@ public:
 
 private:
 
+	void sendRawData(string destination, string data);
+
 	void advertiseRoutingTable();
 
 	string serializeShortestPaths();

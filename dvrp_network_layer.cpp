@@ -18,12 +18,19 @@ void DVRPNetworkLayer::setDelegate(DVRPNetworkLayerDelegate * newDelegate){
 	delegate = newDelegate;
 }
 
+// Sends data to a one hop neighbour only
+void DVRPNetworkLayer::sendRawData(string destination, string data){
+	// TODO: Pipe this data to John's object
+}
 
-// Sends data to a destination on the network
-// Destination must be a one hop neighbour to us
+// Sends data to any reachable destination on the network
 void DVRPNetworkLayer::sendData(string destination, string data){
-	
-
+	// TODO: Use John's mac address function to find the address of this machine
+	string myAddress;
+	DataPacket dataPacket(0, 5, myAddress, destination, data);
+	string packetData = dataPacket.toString();
+	string optimumRoute = routingTable->getBestRoute(destination);
+	sendRawData(optimumRoute, packetData);
 }
 // Forwards a packet that was not meant for us
 void DVRPNetworkLayer::forwardPacket(Packet * p){
@@ -32,25 +39,65 @@ void DVRPNetworkLayer::forwardPacket(Packet * p){
 	
 	if(bestRoute != "INVALID"){ // If there is actually a path to the destination
 		string data = p->toString();
-		sendData(bestRoute, data);	
+		sendRawData(bestRoute, data);	
 	}
 }
 
 // Updates our routing table using the information that source has cerain
 // distances to other nodes as per the included routing table
 void DVRPNetworkLayer::updateRoutingTable(string routingVector, string source){
-	
+	int numberOfEntries = -1; // Used to hold the number of entries in the routing vector
+	stringstream routingVectorStream(routingVector); // Create a stringstream that will be used for parsing the routing vector
+	routingVectorStream >> numberOfEntries; // Parse the number of entries in the routing table
+	if(numberOfEntries != -1){ // If there was no weird parsing error
+
+		for(int i = 0 ; i < numberOfEntries; i++){
+
+			string destination;
+			routingVectorStream >> destination;
+
+			int distance;
+			routingVectorStream >> distance;
+			
+			routingTable->newRoute(destination, source, distance + 1);
+		}
+	}
+		
 }
 
 
 // Tells our closest neighbours about how fast we can get to other destinations
 void DVRPNetworkLayer::advertiseRoutingTable(){
 
+	string routingVector = serializeShortestPaths();
+	string myAddress; // = getMyMacAddress()
+	// TODO: Implement code below when john finishes
+
+	// For each neighbour in our routing table
+		string currentDestinationAddress; // The current neighbour in the table
+		RoutingPacket routingTablePacket(5, 0, myAddress, currentDestinationAddress, routingVector); // Construct the packet data
+		string packetData = routingTablePacket.toString(); // Construct the packet data
+		sendRawData(currentDestinationAddress, packetData); // Send the packet data
 }
 
 // Creates a serialized version of the most optimal routes in the routing table
 string DVRPNetworkLayer::serializeShortestPaths(){
-	
+	string delimiter1 = " ";
+	string delimiter2 = "\n";
+	stringstream serialization;
+	// TODO: Implement the code below when John finishes and Eric updates his routing table
+	// int routingVectorSize = ;
+	// serialization << routingVectorSize;
+	serialization << delimiter2;
+	// For each person in our neighbour table
+		// string currentDestination;
+		// string optimumLeavingNode = routingTable->getBestRoute(currentDestination);
+		// int distance = routingTable->getDistance(currentDestination);
+		// serialization << currentDestination;
+		serialization << delimiter1;
+		// serialization << distance;
+		serialization << delimiter2;
+	return serialization.str();
 }
 
 
