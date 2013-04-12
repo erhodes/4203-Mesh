@@ -26,8 +26,13 @@ void DVRPNetworkLayer::sendRawData(string destination, string data){
 // Sends data to any reachable destination on the network
 void DVRPNetworkLayer::sendData(string destination, string data){
 	// TODO: Use John's mac address function to find the address of this machine
-	string myAddress;
+	string myAddress = "e9:ff:33:10:9f";
+	cout << "PARAMETER MY ADDRESS "<<  myAddress << "\n";
+	cout << "PARAMETER DESTINATION " << destination << "\n";
+	cout << "PARAMETER DATA " << data << "\n";
+	cout << "About to construct the data packet\n";
 	DataPacket dataPacket(0, 5, myAddress, destination, data);
+	cout << "Successfully constructed the packet\n";
 	string packetData = dataPacket.toString();
 	string optimumRoute = routingTable->getBestRoute(destination);
 	sendRawData(optimumRoute, packetData);
@@ -90,9 +95,9 @@ string DVRPNetworkLayer::serializeShortestPaths(){
 	// serialization << routingVectorSize;
 	serialization << delimiter2;
 	// For each person in our neighbour table
-		// string currentDestination;
-		// string optimumLeavingNode = routingTable->getBestRoute(currentDestination);
-		// int distance = routingTable->getDistance(currentDestination);
+		string currentDestination;
+		string optimumLeavingNode = routingTable->getBestRoute(currentDestination);
+		int distance = routingTable->getBestDistance(currentDestination);
 		// serialization << currentDestination;
 		serialization << delimiter1;
 		// serialization << distance;

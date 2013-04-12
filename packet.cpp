@@ -13,6 +13,8 @@
 
 Packet::Packet( int lifeTimeParam, int packetNumberParam,  string sourceAddressParam, string destinationAddressParam, string payloadParam){
 
+	cout << "Made it to the start of constructor\n";
+
 	time_t tempTime;
 	time(&tempTime);
 
@@ -30,6 +32,7 @@ Packet::Packet( int lifeTimeParam, int packetNumberParam,  string sourceAddressP
 
 	payload = payloadParam;
 
+	cout <<"Made it to end of constructor\n";
 }
 
 Packet::Packet(string packetData){
@@ -57,7 +60,6 @@ Packet::Packet(string packetData){
 	tm date;
 	strptime(timeBuffer, "%Y-%m-%d %H:%M:%S", &date);	
 	
-
 	time_t packetTime = mktime(&date);
 	setTimeSent(packetTime);
 	
@@ -71,6 +73,7 @@ Packet::Packet(string packetData){
 	
 	int hop;
 	deserializer >> hop;
+	hop++;
 	setHopCount(hop);
 
 	string src;
