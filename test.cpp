@@ -70,9 +70,9 @@ int testPacketFactoryForDataPacket(void){
 	int lifeTime = 5;
 
 	int packetNumber = 10; 
-	
-	string sourceAddress = "08:00:27:c7:cf:e9";
 
+	string sourceAddress = "08:00:27:c7:cf:e9";
+	
 	string destinationAddress = "08:00:27:c7:cf:ff";
 
 	string payload = "message";
@@ -81,7 +81,7 @@ int testPacketFactoryForDataPacket(void){
 
 	string packetType = "DataPacket";
 
-	DataPacket p(packetNumber, destinationAddress, payload);
+	DataPacket p(lifeTime,packetNumber, sourceAddress, destinationAddress, payload);
 
 	if(p.getPacketNumber() != packetNumber){
 		cout << "Failure: packetNumber getter/setter\n";
@@ -121,6 +121,11 @@ int testPacketFactoryForDataPacket(void){
 		return -1;	
 	}
 
+	if(p.getType() != packetType){
+		cout << "Failure: getType for DataPacket\n";
+		return -1;
+	}
+
 	return 0;
 
 
@@ -140,7 +145,7 @@ int testPacketFactoryForRoutingPacket(void){
 
 	int hopCount = 0;
 
-	Packet p(lifeTime, packetNumber, sourceAddress, destinationAddress, payload);
+	RoutingPacket p(lifeTime, packetNumber, sourceAddress, destinationAddress, payload);
 
 	if(p.getPacketNumber() != packetNumber){
 		cout << "Failure: packetNumber getter/setter\n";
