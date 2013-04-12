@@ -84,6 +84,10 @@ void  ExampleChat::initNetworkLayer(){
 	
 }
 
+void ExampleChat::dataReceived(string source, string data){
+
+}
+
 void ExampleChat::cleanupNetworkLayer(){
 	delete networkLayer;
 }

@@ -48,6 +48,12 @@ void DVRPNetworkLayer::advertiseRoutingTable(){
 
 }
 
+// Creates a serialized version of the most optimal routes in the routing table
+string DVRPNetworkLayer::serializeShortestPaths(){
+	
+}
+
+
 // This method gets called on us when a packet has been received
 // 	sourceAddress - The neighbour who sent us the packet
 //	destinationAddress - Should always be our mac address
@@ -66,7 +72,7 @@ void DVRPNetworkLayer::receive(string sourceAddress, string destinationAddress, 
 				}
 			}else if(packet->getType() == "RoutingPacket"){
 
-				string shortestPathsSerializedInitial = serializeShortestPaths(); // Figure out the most optimal paths before we update the routing table
+				string shortestPathSerializedInitial = serializeShortestPaths(); // Figure out the most optimal paths before we update the routing table
 
 				string routingVector = packet->getPayload(); 	// Gets the routing vector from within the packet object
 

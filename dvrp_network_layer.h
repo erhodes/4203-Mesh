@@ -31,6 +31,14 @@ public:
 
 private:
 
+	void advertiseRoutingTable();
+
+	string serializeShortestPaths();
+
+	void updateRoutingTable(string routingVector, string source);
+
+	void forwardPacket(Packet * p);
+
 	DVRPNetworkLayerDelegate * delegate;
 
 	RoutingTable * routingTable;

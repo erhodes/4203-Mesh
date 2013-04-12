@@ -23,7 +23,10 @@ class ExampleChat : DVRPNetworkLayerDelegate{
 		int validateAddress(int address);
 		void handleSendMessage();
 
+		
+
 	public:
+		void dataReceived(string source, string data);	
 		void runChatSession();	
 		
 
