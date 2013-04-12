@@ -13,6 +13,7 @@ public:
     void newRoute(string destination, string direction, int distance);
     void printTable();
     string getBestRoute(string destination);
+    int getBestDistance(string destination);
     void deleteDestination(string destination);
     void deleteRoute(string destination, string direction);
 protected:
