@@ -27,7 +27,7 @@ public:
 
 	void setDelegate(DVRPNetworkLayerDelegate *);
 
-	void messageReceived(string sourceAddress, string destinationAddress, string data);
+	void receive(string sourceAddress, string destinationAddress, string data);
 
 private:
 

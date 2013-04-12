@@ -2,7 +2,7 @@
 
 
 
-
+// Constructs a new DVRP network layer
 DVRPNetworkLayer::DVRPNetworkLayer(){
 	setDelegate(NULL);
 	// TODO: INITIALIZE JOHNS OBJECT
@@ -20,13 +20,38 @@ void DVRPNetworkLayer::setDelegate(DVRPNetworkLayerDelegate * newDelegate){
 
 
 // Sends data to a destination on the network
+// Destination must be a one hop neighbour to us
 void DVRPNetworkLayer::sendData(string destination, string data){
 	
 
 }
+// Forwards a packet that was not meant for us
+void DVRPNetworkLayer::forwardPacket(Packet * p){
+	string destination = p->getDestinationAddress();
+	string	bestRoute = routingTable->getBestRoute(destination);
+	
+	if(bestRoute != "INVALID"){ // If there is actually a path to the destination
+		string data = p->toString();
+		sendData(bestRoute, data);	
+	}
+}
+
+// Updates our routing table using the information that source has cerain
+// distances to other nodes as per the included routing table
+void DVRPNetworkLayer::updateRoutingTable(string routingVector, string source){
+	
+}
 
 
-void DVRPNetworkLayer::messageReceived(string sourceAddress, string destinationAddress, string data){
+// Tells our closest neighbours about how fast we can get to other destinations
+void DVRPNetworkLayer::advertiseRoutingTable(){
+
+}
+
+// This method gets called on us when a packet has been received
+// 	sourceAddress - The neighbour who sent us the packet
+//	destinationAddress - Should always be our mac address
+void DVRPNetworkLayer::receive(string sourceAddress, string destinationAddress, string data){
 	PacketFactory factory;
 	Packet * packet = factory.createPacket(data);
 	if(packet){
@@ -37,19 +62,21 @@ void DVRPNetworkLayer::messageReceived(string sourceAddress, string destinationA
 						delegate->dataReceived(sourceAddress, data); // Tell the delegate about the data we received
 					}
 				}else{
-
-
-					// TODO: FORWARD THE PACKET
-
+					forwardPacket(packet);
 				}
 			}else if(packet->getType() == "RoutingPacket"){
 
-				// TODO: Handle the routing packet				
+				string shortestPathsSerializedInitial = serializeShortestPaths(); // Figure out the most optimal paths before we update the routing table
 
-				// update our routing table
-				// tell the neighbours about our routing table by constructing
-				// a vector of the shortest paths
+				string routingVector = packet->getPayload(); 	// Gets the routing vector from within the packet object
 
+				updateRoutingTable(routingVector, sourceAddress); // Update our routing table with whatever we can learn from our near neighbours routing table
+
+				string shortestPathSerializedFinal = serializeShortestPaths(); // Figure out our most optimal paths right now
+				
+				if(shortestPathSerializedInitial != shortestPathSerializedFinal){ // If the routing vector we received actually caused us to find a shorter path to a destination
+					advertiseRoutingTable();
+				}
 			}
 		}else{
 			cout << "Warning: Received expired packet\n";
