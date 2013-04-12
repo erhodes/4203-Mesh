@@ -1,10 +1,10 @@
-#include <iostream>
+#include "example_chat.h"
 
 
 using namespace std;
 
 
-void displayWelcomeMessage(){
+void ExampleChat::displayWelcomeMessage(){
 	cout << " _    _ _____    _  _  __ __ _____    _____ _    _       _______ \n";
 	cout << "| |  | |  __ \\  | || |/_ /_ | ____|  / ____| |  | |   /\\|__   __|\n";
 	cout << "| |__| | |__) | | || |_| || | |__   | |    | |__| |  /  \\  | |   \n";
@@ -17,7 +17,7 @@ void displayWelcomeMessage(){
 }
 
 
-void displayOptions(){
+void ExampleChat::displayOptions(){
 	cout << "1. List Other Chatters\n";
 	cout << "2. Send Message to a chatter\n";
 	cout << "3. Exit\n"; 
@@ -25,7 +25,7 @@ void displayOptions(){
 	cout << "Please make a selection: ";
 }
 
-int getUserSelection(){
+int ExampleChat::getUserSelection(){
 	int selection = -1;
 	cin >> selection;
 	
@@ -35,7 +35,7 @@ int getUserSelection(){
 	return selection;
 }
 
-void handleListChatters(){
+void ExampleChat::handleListChatters(){
 	cout << "\n";
 	cout << "Here is a list of chatters available\n";
 	for(int i = 0 ; i < 10; i++){
@@ -44,28 +44,28 @@ void handleListChatters(){
 	cout << "\n";
 }
 
-string getUserString(){
+string ExampleChat::getUserString(){
 	string input;
 	getline(cin, input);
 	return input;
 }
 
-void displayAddressRequestMessage(){
+void ExampleChat::displayAddressRequestMessage(){
 	cout << "\n";
 	cout << "Please input the corresponding number of the chatter you wish to send a message to: ";
 }
 
-void displayMessageRequestMessage(){
+void ExampleChat::displayMessageRequestMessage(){
 	cout << "\n";
 	cout << "Please input the message that you wish to send to the other chatter: ";
 }
 
-int validateAddress(int address){
+int ExampleChat::validateAddress(int address){
 	// Just check if the computer is reachable
 	return 0;	
 }
 
-void handleSendMessage(){
+void ExampleChat::handleSendMessage(){
 	displayAddressRequestMessage();
 	int address =getUserSelection();
 	if(validateAddress(address) == 0){ // Success
@@ -78,7 +78,17 @@ void handleSendMessage(){
 	cout << "\n";
 }
 
-int main(int argc, char ** argv){
+void  ExampleChat::initNetworkLayer(){
+	networkLayer = new DVRPNetworkLayer();
+	
+}
+
+void ExampleChat::cleanupNetworkLayer(){
+	delete networkLayer;
+}
+
+void ExampleChat::runChatSession(){
+	initNetworkLayer();
 
 	displayWelcomeMessage();
 
@@ -93,6 +103,16 @@ int main(int argc, char ** argv){
 			handleSendMessage();
 		}
 	}
+	cleanupNetworkLayer();
+}
+
+
+
+int main(int argc, char ** argv){
+	
+	ExampleChat exampleChat;
+	exampleChat.runChatSession();	
+
 	return 0;
 }
 
