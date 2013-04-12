@@ -7,12 +7,16 @@ DVRPNetworkLayer::DVRPNetworkLayer(){
 
 }
 
-void setDelegate(DVRPNetworkLayerDelegate * newDelegate){
+
+// Sets the delegate for this object
+void DVRPNetworkLayer::setDelegate(DVRPNetworkLayerDelegate * newDelegate){
 	delegate = newDelegate;
 }
 
-void sendData(string destination, string data){
 
+// Sends data to a destination on the network
+void DVRPNetworkLayer::sendData(string destination, string data){
+	
 }
 
 
