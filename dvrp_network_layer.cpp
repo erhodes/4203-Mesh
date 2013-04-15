@@ -139,6 +139,7 @@ string DVRPNetworkLayer::serializeShortestPaths(){
 // 	sourceAddress - The neighbour who sent us the packet
 //	destinationAddress - Should always be our mac address
 void DVRPNetworkLayer::handleMessage(string sourceAddress, string destinationAddress, string data){
+	cout << "PACKET RECEIVED\n";
 	PacketFactory factory;
 	Packet * packet = factory.createPacket(data);
 	if(packet){

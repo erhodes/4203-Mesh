@@ -250,6 +250,7 @@ void WLAN::receive(){
   while(running){
     // loop until a non-empty frame has been received on "device"
     while (running){
+	cout << "ENTERING INNER LOOP\n";
       // clear buffer
       memset(buff, 0, ifconfig.mtu);
       // wait and receive a frame
@@ -282,21 +283,30 @@ void WLAN::receive(){
     string source(asciiSrcAddr);
     // get message
     string message((char*)(buff + sizeof(WLANHeader)));
-    // check destination
+    cout << "1\n";
+
+	// check destination
     if(destination != getAddress() && destination != WLAN_BROADCAST){
-      continue;
+      	cout << "2\n";
+	continue;
     }
+     cout <<"3\n";
     // check header
     if(WLAN_HEADER == message.substr(0, WLAN_HEADER.length())){
       // strip header
+	cout <<"4\n";
       message.erase(0, WLAN_HEADER.length());
     }
     else{
+	cout << "5\n";
       continue;
     }
+	cout << "6\n";
     // handle message
     if(messageHandler != 0){
+	cout <<"7\n";
       messageHandler->handleMessage(source, destination, message);
     }  
   }
+cout << "DONE RECEIVING\n";
 }

@@ -95,19 +95,26 @@ vector<string> NDP::getAddresses(){
 
 // Handle Message
 void NDP::handleMessage(string src, string dst, string msg){
+cout <<"ANY OLD MESSAGE\n";
   // handle beacon
   if(msg == "<BEACON>"){
+	cout << "IT ALWAYS GOES IN HERE\n";
     // Lock
     barrier.lock();
+	cout << "LOCKED\n";
     // Add to neighbor table
     addNeighbor(src);
+	cout << "ADDED\n";
     // Unlock
     barrier.unlock();
+	cout <<"FINISHED\n";
   }
   // handle other
   else{
+	cout << "MESSAGE HANDLER ELSE\n";
     // delegate message
     if(messageHandler != 0){
+	cout << "NOT ZERO\n";
       messageHandler->handleMessage(src, dst, msg);
     }
   }
@@ -128,7 +135,9 @@ void NDP::update(){
         // New neighbor
         if(n.getAge() == -1){
           // Notify IARP
+		barrier.unlock();
           instance->foundNeighbor(n.getAddress());
+		barrier.lock();
         }
         n.setAge(0);
         n.setArrived(false);
@@ -152,7 +161,9 @@ void NDP::update(){
       // Remove neighbor
       removeNeighbor(a);
       // Notify IARP      
+	barrier.unlock();
       instance->lostNeighbor(a);
+	barrier.lock();
     }
     // Unlock
     barrier.unlock();
