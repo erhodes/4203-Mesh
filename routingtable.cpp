@@ -75,6 +75,16 @@ int RoutingTable::getBestDistance(string destination){
     }
 }
 
+vector<string> RoutingTable::getAllDestinations(){
+    vector<string> result;
+    std::map<string, map<string, int>* >::iterator tableIterator = table.begin();
+    while (tableIterator != table.end()){
+        result.push_back(tableIterator->first);
+        tableIterator++;
+    }
+    return result;
+}
+
 void RoutingTable::deleteDestination(string destination){
     table.erase(destination);
 }

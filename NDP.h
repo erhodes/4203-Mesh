@@ -16,7 +16,7 @@
 using namespace std;
 
 // NDP Class Definition
-class NDP: MessageHandler{
+class NDP: public MessageHandler{
 
   // Constants
   static const int updateMinDelay = 100;

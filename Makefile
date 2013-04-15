@@ -1,7 +1,7 @@
 all: NDP.o Neighbor.o WLAN.o MessageHandler.o test chat
 
 chat: packet.o data_packet.o routing_packet.o packet_factory.o dvrp_network_layer.o routingtable.o example_chat.o NDP.o Neighbor.o WLAN.o MessageHandler.o
-	g++ -std=c++0x packet.o data_packet.o routing_packet.o packet_factory.o dvrp_network_layer.o routingtable.o example_chat.o NDP.o Neighbor.o WLAN.o MessageHandler.o -o chat
+	g++ -std=c++0x -pthread packet.o data_packet.o routing_packet.o packet_factory.o dvrp_network_layer.o routingtable.o example_chat.o NDP.o Neighbor.o WLAN.o MessageHandler.o -o chat
 
 test: packet.h packet.cpp test.cpp data_packet.h data_packet.cpp routing_packet.h routing_packet.cpp packet_factory.h packet_factory.cpp
 	g++ packet.cpp test.cpp data_packet.cpp routing_packet.cpp packet_factory.cpp -o test

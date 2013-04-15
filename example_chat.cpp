@@ -6,7 +6,7 @@ using namespace std;
 
 void ExampleChat::displayWelcomeMessage(){
 	cout << " _    _ _____    _  _  __ __ _____    _____ _    _       _______ \n";
-	cout << "| |  | |  __ \\  | || |/_ /_ | ____|  / ____| |  | |   /\\|__   __|\n";
+    cout << "| |  | |  __ \\  | || |/_ /_ | ____|  / ____| |  | |   /\\|__   __|\n";
 	cout << "| |__| | |__) | | || |_| || | |__   | |    | |__| |  /  \\  | |   \n";
 	cout << "|  __  |  ___/  |__   _| || |___ \\  | |    |  __  | / /\\ \\ | |   \n";
 	cout << "| |  | | |         | | | || |___) | | |____| |  | |/ ____ \\| |   \n";
@@ -125,7 +125,6 @@ void ExampleChat::runChatSession(){
 
 
 int main(int argc, char ** argv){
-	
 	ExampleChat exampleChat;
 	exampleChat.runChatSession();	
 

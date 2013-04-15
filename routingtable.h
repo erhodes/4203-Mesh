@@ -4,6 +4,8 @@
 #include <iostream>
 #include <map>
 #include <utility>
+#include <vector>
+
 using namespace std;
 
 class RoutingTable
@@ -14,6 +16,7 @@ public:
     void printTable();
     string getBestRoute(string destination);
     int getBestDistance(string destination);
+    vector<string> getAllDestinations();
     void deleteDestination(string destination);
     void deleteRoute(string destination, string direction);
     void deleteNode(string address);
