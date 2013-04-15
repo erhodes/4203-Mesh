@@ -91,6 +91,18 @@ void RoutingTable::deleteRoute(string destination, string direction){
     }
 }
 
+void RoutingTable::deleteNode(string address){
+    deleteDestination(address);
+    std::map<string, map<string, int>* >::iterator tableIterator = table.begin();
+    //std::map<string, int>* rowIterator;
+    while (tableIterator != table.end()){
+        //rowIterator = tableIterator->second;
+        map<string, int>* row = tableIterator->second;
+        row->erase(address);
+        tableIterator++;
+    }
+}
+
 void RoutingTable::printTable(){
     std::map<string, map<string, int>* >::iterator it = table.begin();
     for(it = table.begin(); it!=table.end(); ++it){
