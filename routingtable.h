@@ -16,6 +16,7 @@ public:
     int getBestDistance(string destination);
     void deleteDestination(string destination);
     void deleteRoute(string destination, string direction);
+    void deleteNode(string address);
 protected:
     map<string, map<string, int>* > table;
 
