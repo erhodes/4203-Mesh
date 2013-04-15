@@ -95,26 +95,20 @@ vector<string> NDP::getAddresses(){
 
 // Handle Message
 void NDP::handleMessage(string src, string dst, string msg){
-cout <<"ANY OLD MESSAGE\n";
   // handle beacon
   if(msg == "<BEACON>"){
-	cout << "IT ALWAYS GOES IN HERE\n";
     // Lock
     barrier.lock();
-	cout << "LOCKED\n";
     // Add to neighbor table
     addNeighbor(src);
-	cout << "ADDED\n";
     // Unlock
     barrier.unlock();
-	cout <<"FINISHED\n";
   }
   // handle other
   else{
 	cout << "MESSAGE HANDLER ELSE\n";
     // delegate message
     if(messageHandler != 0){
-	cout << "NOT ZERO\n";
       messageHandler->handleMessage(src, dst, msg);
     }
   }
