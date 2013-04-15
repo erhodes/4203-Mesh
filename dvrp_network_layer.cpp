@@ -6,14 +6,11 @@
 DVRPNetworkLayer::DVRPNetworkLayer(){
 	setDelegate(NULL);
 
-
 	neighbourDiscovery = new NDP();
 	neighbourDiscovery->registerMessageHandler(this);
 	neighbourDiscovery->start();
 
-
 	routingTable = new RoutingTable();
-	
 	
 }
 
@@ -31,7 +28,9 @@ void DVRPNetworkLayer::foundNeighbor(const string address){
 	// Add the trivial route to the table
 	routingTable->newRoute(address,address,1);
 	cout << "\nnewRoute(" << address << "," << address << "1);\n";
-	advertiseRoutingTable();
+	
+		advertiseRoutingTable();
+
 }
 
 // Lost Neighbor
