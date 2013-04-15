@@ -102,7 +102,7 @@ void DVRPNetworkLayer::advertiseRoutingTable(){
 
 	vector <string> neighbours = neighbourDiscovery->getAddresses();
 	for(string &currentDestinationAddress: neighbours){
-		RoutingPacket routingTablePacket(5, 0, myAddress, currentDestinationAddress, routingVector); // Construct the packet data
+		RoutingPacket routingTablePacket(0, 5, myAddress, currentDestinationAddress, routingVector); // Construct the packet data
 		string packetData = routingTablePacket.toString(); // Construct the packet data
 		sendRawData(currentDestinationAddress, packetData); // Send the packet data
 	}
