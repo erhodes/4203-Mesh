@@ -17,25 +17,18 @@ DVRPNetworkLayer::DVRPNetworkLayer(){
 	
 }
 
-
-
 // Found Neighbor
-virtual void foundNeighbor(const string address){
+void DVRPNetworkLayer::foundNeighbor(const string address){
 	// Add the trivial route to the table
-	
 	routingTable->newRoute(address,address,1);
+	advertiseRoutingTable();
 }
 
 // Lost Neighbor
-virtual void lostNeighbor(const string address){
-	routingTable->deleteDirection(address);
-
+void DVRPNetworkLayer::lostNeighbor(const string address){
+	routingTable->deleteNode(address);
+	advertiseRoutingTable();
 }
-
-
-
- 
-
 
 // Sets the delegate for this object
 void DVRPNetworkLayer::setDelegate(DVRPNetworkLayerDelegate * newDelegate){
@@ -101,7 +94,7 @@ void DVRPNetworkLayer::advertiseRoutingTable(){
 	string myAddress= WLAN::getInstance()->getAddress();
 
 	vector <string> neighbours = neighbourDiscovery->getAddresses();
-	for(string &currentDestinationAddress: neighbors){
+	for(string &currentDestinationAddress: neighbours){
 		RoutingPacket routingTablePacket(5, 0, myAddress, currentDestinationAddress, routingVector); // Construct the packet data
 		string packetData = routingTablePacket.toString(); // Construct the packet data
 		sendRawData(currentDestinationAddress, packetData); // Send the packet data
@@ -120,7 +113,7 @@ string DVRPNetworkLayer::serializeShortestPaths(){
 	int routingVectorSize = neighbours.size();
 	serialization << routingVectorSize;
 	serialization << delimiter2;
-	for(string &currentDestinationAddress: neighbors){	
+	for(string &currentDestinationAddress: neighbours){	
 		string currentDestination;
 		string optimumLeavingNode = routingTable->getBestRoute(currentDestination);
 		int distance = routingTable->getBestDistance(currentDestination);
