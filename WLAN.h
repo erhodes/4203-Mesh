@@ -46,11 +46,13 @@ class WLAN{
 
   // WLANHeader Struct Definition
   struct WLANHeader{
+        // destination address
+    WLANAddr destAddr;
     // source address
     WLANAddr srcAddr;
-    // destination address
-    WLANAddr destAddr;
-    // type
+
+
+	// type
     unsigned short type;
   };
 
