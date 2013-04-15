@@ -11,7 +11,7 @@
 // destinationAddress - The destination address of the packet
 // payload - The payload of the packet
 
-Packet::Packet( int lifeTimeParam, int packetNumberParam,  string sourceAddressParam, string destinationAddressParam, string payloadParam){
+Packet::Packet(int packetNumberParam, int lifeTimeParam, string sourceAddressParam, string destinationAddressParam, string payloadParam){
 
 	cout << "Made it to the start of constructor\n";
 
