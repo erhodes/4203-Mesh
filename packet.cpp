@@ -106,7 +106,8 @@ bool Packet::isExpired() const{
 	time_t then = getTimeSent();
 	time(&now);
 	double difference=difftime(now, then);
-	if(difference > getLifeTime()){
+	cout << "DIFFERENCE IN TIMES " << difference << "\n";
+	if(difference <  getLifeTime()){
 		return true;
 	}
 	return false;
