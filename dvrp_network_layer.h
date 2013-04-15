@@ -4,6 +4,9 @@
 #include "packet_factory.h"
 #include "dvrp_network_layer_delegate.h"
 #include "routingtable.h"
+#include "NDP.h"
+
+
 
 /*
 	The purpose of this class is to manage the DVRP network layer
@@ -15,7 +18,7 @@
 #define INCLUDE_DVRP_NETWORK_LAYER
 
 
-class DVRPNetworkLayer{
+class DVRPNetworkLayer : public MessageHandler{
 	
 public:
 
@@ -27,7 +30,16 @@ public:
 
 	void setDelegate(DVRPNetworkLayerDelegate *);
 
-	void receive(string sourceAddress, string destinationAddress, string data);
+
+	virtual void handleMessage(string src, string dst, string msg);
+
+	// Found Neighbor
+	virtual void foundNeighbor(const string address);
+
+ 	// Lost Neighbor
+ 	virtual void lostNeighbor(const string address);
+
+
 
 private:
 
@@ -44,6 +56,8 @@ private:
 	DVRPNetworkLayerDelegate * delegate;
 
 	RoutingTable * routingTable;
+
+	NDP * neighbourDiscovery;
 };
 
 

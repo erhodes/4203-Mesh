@@ -5,12 +5,36 @@
 // Constructs a new DVRP network layer
 DVRPNetworkLayer::DVRPNetworkLayer(){
 	setDelegate(NULL);
-	// TODO: INITIALIZE JOHNS OBJECT
+
+
+	neighbourDiscovery = new NDP();
+	neighbourDiscovery->registerMessageHandler(this);
+	neighbourDiscovery->start();
+
 
 	routingTable = new RoutingTable();
-
+	
 	
 }
+
+
+
+// Found Neighbor
+virtual void foundNeighbor(const string address){
+	// Add the trivial route to the table
+	
+	routingTable->newRoute(address,address,1);
+}
+
+// Lost Neighbor
+virtual void lostNeighbor(const string address){
+	routingTable->deleteDirection(address);
+
+}
+
+
+
+ 
 
 
 // Sets the delegate for this object
@@ -20,13 +44,12 @@ void DVRPNetworkLayer::setDelegate(DVRPNetworkLayerDelegate * newDelegate){
 
 // Sends data to a one hop neighbour only
 void DVRPNetworkLayer::sendRawData(string destination, string data){
-	// TODO: Pipe this data to John's object
+	WLAN::getInstance()->send(destination,data);
 }
 
 // Sends data to any reachable destination on the network
 void DVRPNetworkLayer::sendData(string destination, string data){
-	// TODO: Use John's mac address function to find the address of this machine
-	string myAddress = "e9:ff:33:10:9f";
+	string myAddress = WLAN::getInstance()->getAddress();
 	cout << "PARAMETER MY ADDRESS "<<  myAddress << "\n";
 	cout << "PARAMETER DESTINATION " << destination << "\n";
 	cout << "PARAMETER DATA " << data << "\n";
@@ -75,14 +98,14 @@ void DVRPNetworkLayer::updateRoutingTable(string routingVector, string source){
 void DVRPNetworkLayer::advertiseRoutingTable(){
 
 	string routingVector = serializeShortestPaths();
-	string myAddress; // = getMyMacAddress()
-	// TODO: Implement code below when john finishes
+	string myAddress= WLAN::getInstance()->getAddress();
 
-	// For each neighbour in our routing table
-		string currentDestinationAddress; // The current neighbour in the table
+	vector <string> neighbours = neighbourDiscovery->getAddresses();
+	for(string &currentDestinationAddress: neighbors){
 		RoutingPacket routingTablePacket(5, 0, myAddress, currentDestinationAddress, routingVector); // Construct the packet data
 		string packetData = routingTablePacket.toString(); // Construct the packet data
 		sendRawData(currentDestinationAddress, packetData); // Send the packet data
+	}
 }
 
 // Creates a serialized version of the most optimal routes in the routing table
@@ -90,18 +113,22 @@ string DVRPNetworkLayer::serializeShortestPaths(){
 	string delimiter1 = " ";
 	string delimiter2 = "\n";
 	stringstream serialization;
-	// TODO: Implement the code below when John finishes and Eric updates his routing table
-	// int routingVectorSize = ;
-	// serialization << routingVectorSize;
+	
+	vector <string> neighbours = neighbourDiscovery->getAddresses();
+          
+	
+	int routingVectorSize = neighbours.size();
+	serialization << routingVectorSize;
 	serialization << delimiter2;
-	// For each person in our neighbour table
+	for(string &currentDestinationAddress: neighbors){	
 		string currentDestination;
 		string optimumLeavingNode = routingTable->getBestRoute(currentDestination);
 		int distance = routingTable->getBestDistance(currentDestination);
-		// serialization << currentDestination;
+		serialization << currentDestinationAddress;
 		serialization << delimiter1;
-		// serialization << distance;
+		serialization << distance;
 		serialization << delimiter2;
+	}
 	return serialization.str();
 }
 
@@ -109,7 +136,7 @@ string DVRPNetworkLayer::serializeShortestPaths(){
 // This method gets called on us when a packet has been received
 // 	sourceAddress - The neighbour who sent us the packet
 //	destinationAddress - Should always be our mac address
-void DVRPNetworkLayer::receive(string sourceAddress, string destinationAddress, string data){
+void DVRPNetworkLayer::handleMessage(string sourceAddress, string destinationAddress, string data){
 	PacketFactory factory;
 	Packet * packet = factory.createPacket(data);
 	if(packet){
