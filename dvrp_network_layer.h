@@ -39,7 +39,10 @@ public:
  	// Lost Neighbor
  	virtual void lostNeighbor(const string address);
 
+	vector<string> getAllNodeAddresses();
 
+
+	string getMyNetworkAddress();
 
 private:
 

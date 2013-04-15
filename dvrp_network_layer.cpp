@@ -17,6 +17,15 @@ DVRPNetworkLayer::DVRPNetworkLayer(){
 	
 }
 
+vector<string> DVRPNetworkLayer::getAllNodeAddresses(){
+	return routingTable->getAllDestinations();
+}
+
+string DVRPNetworkLayer::getMyNetworkAddress(){
+	return WLAN::getInstance()->getAddress();
+}
+
+
 // Found Neighbor
 void DVRPNetworkLayer::foundNeighbor(const string address){
 	// Add the trivial route to the table

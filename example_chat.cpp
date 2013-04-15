@@ -38,9 +38,16 @@ int ExampleChat::getUserSelection(){
 void ExampleChat::handleListChatters(){
 	cout << "\n";
 	cout << "Here is a list of chatters available\n";
-	for(int i = 0 ; i < 10; i++){
-
-	}	
+	int currentAddressNumber= 1;
+	vector<string> allAddresses = networkLayer->getAllNodeAddresses();
+	for(string &currentNetworkAddress : allAddresses){
+		if(currentNetworkAddress != networkLayer->getMyNetworkAddress()){
+			cout << currentAddressNumber << ". ";
+			cout << currentNetworkAddress;
+			cout << "\n";
+			currentAddressNumber++;
+		}
+	}
 	cout << "\n";
 }
 
