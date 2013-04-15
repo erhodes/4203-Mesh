@@ -103,11 +103,9 @@ void NDP::handleMessage(string src, string dst, string msg){
     addNeighbor(src);
     // Unlock
     barrier.unlock();
-	cout << "NORMAL HANDLER\n";
   }
   // handle other
   else{
-	cout << "MESSAGE HANDLER ELSE " << msg << "\n";
     // delegate message
     if(messageHandler != 0){
       messageHandler->handleMessage(src, dst, msg);

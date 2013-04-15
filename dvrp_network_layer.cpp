@@ -27,9 +27,7 @@ string DVRPNetworkLayer::getMyNetworkAddress(){
 void DVRPNetworkLayer::foundNeighbor(const string address){
 	// Add the trivial route to the table
 	routingTable->newRoute(address,address,1);
-	cout << "\nnewRoute(" << address << "," << address << "1);\n";
-	
-		advertiseRoutingTable();
+	advertiseRoutingTable();
 
 }
 
@@ -125,7 +123,6 @@ string DVRPNetworkLayer::serializeShortestPaths(){
 	for(string &currentDestinationAddress: neighbours){	
 		string optimumLeavingNode = routingTable->getBestRoute(currentDestinationAddress);
 		int distance = routingTable->getBestDistance(currentDestinationAddress);
-		cout << "\ngetBestDistance(" << currentDestinationAddress << "); -> " << distance << "\n";
 		
 		routingTable->printTable();
 		serialization << currentDestinationAddress;
