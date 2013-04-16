@@ -90,7 +90,10 @@ void ExampleChat::handleSendMessage(){
 		displayMessageRequestMessage();
 		string message = getUserString();
 		cout <<"ABOUT TO SEND THE MESSAGE\n";
-		networkLayer->sendData(lookupAddress(address), message);
+		string actualAddress = lookupAddress(address);
+		cout << "TRYING TO SEND TO " << actualAddress << "\n";
+		
+		networkLayer->sendData(actualAddress, message);
 	}else{
 		cout << "\nThe address you entered does not appear to be that of a chatter, please try again later\n";
 	}

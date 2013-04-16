@@ -141,15 +141,22 @@ string DVRPNetworkLayer::serializeShortestPaths(){
 // 	sourceAddress - The neighbour who sent us the packet
 //	destinationAddress - Should always be our mac address
 void DVRPNetworkLayer::handleMessage(string sourceAddress, string destinationAddress, string data){
-	cout << "PACKET RECEIVED\n";
+	cout << "START PACKET RECEIVED\n";
+	cout << data;
+	cout << "END PACKET RECEIVED\n";
 	PacketFactory factory;
 	Packet * packet = factory.createPacket(data);
 	if(packet){
 		if(!packet->isExpired()){ // If the received packet is not expired
 			if(packet->getType() == "DataPacket"){ // If the packet received is a data packet
+				cout << "PACKET IS A DATA PACKET\n";
+				cout << "MY ADDRESS: " << destinationAddress << "\n";
+				cout << "DESTINATION ADDRESSS: " << packet->getDestinationAddress() << "\n"; 
 				if(packet->getDestinationAddress() == destinationAddress){ // If the destination of the received packet was us
+					cout << "PACKET WAS FOR ME\n";
 					if(delegate){ // If there is a delegate we can tell about the data received for us
-						delegate->dataReceived(sourceAddress, data); // Tell the delegate about the data we received
+						cout <<"TELLING THE DELEGATE\n";
+						delegate->dataReceived(sourceAddress, packet->getPayload()); // Tell the delegate about the data we received
 					}
 				}else{
 					forwardPacket(packet);
