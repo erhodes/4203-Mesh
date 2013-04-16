@@ -110,7 +110,7 @@ void DVRPNetworkLayer::updateRoutingTable(string routingVector, string source){
 	routingVectorStream >> numberOfEntries; // Parse the number of entries in the routing table
 	if(numberOfEntries != -1){ // If there was no weird parsing error
         
-	//routingTable->deleteNode(source);
+//	routingTable->deleteNode(source);
         
 	routingTable->newRoute(source,source,1);
 		for(int i = 0 ; i < numberOfEntries; i++){

@@ -26,7 +26,7 @@ void RoutingTable::newRoute(string destination, string direction, int distance){
             //the route already existed, so update it's distance
 
             //check to see if the new route is shorter, otherwise it will be ignored
-            if (rowIterator->second < distance){
+            if (rowIterator->second > distance){
                 rowIterator->second = distance;
             }
         }
