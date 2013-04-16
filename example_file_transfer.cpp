@@ -4,6 +4,16 @@
 using namespace std;
 
 
+ExampleFileTransfer::ExampleFileTransfer(){
+
+	inputFile = NULL;
+	outputFile = NULL;
+
+	totalBytesWritten =0;
+	totalFileSize = 0;
+}
+
+
 void ExampleFileTransfer::displayWelcomeMessage(){
 	cout << "    __  ______     __ __ ____________   ____________    ______\n";
 	cout << "   / / / / __ \\   / // /<  <  / ____/  / ____/  _/ /   / ____/\n";
@@ -96,12 +106,53 @@ void ExampleFileTransfer::handleFileTransfer(string destinationAddress, string f
 	
 	long totalBytes = 0;
 
+	string delimiter = "\n";
+
+	struct stat st;
+	stat(fileName.c_str(), &st);
+	long fileLength = st.st_size;
+
+	stringstream fileTransferInformation;
+
+	fileTransferInformation << "BEGIN FILE TRANSFER";
+	
+	fileTransferInformation << delimiter;
+
+	fileTransferInformation << fileName;
+
+	fileTransferInformation << delimiter;
+
+	fileTransferInformation << fileLength;
+
+	string fileTransferHeader = fileTransferInformation.str();	
+	
+	networkLayer->sendData(destinationAddress, fileTransferHeader);
+
+	inputFile = fopen(fileName.c_str(), "r");
+
+	char buffer[MAX_BLOCK_SIZE + 1];
+	buffer[MAX_BLOCK_SIZE] = '\0';
+	long i; 
+	for(i = 0; i < fileLength - MAX_BLOCK_SIZE; i++){
+		
+		fread(buffer, MAX_BLOCK_SIZE, 1, inputFile);
+		string nextFileBlock(buffer);
+		
+		networkLayer->sendData(destinationAddress, nextFileBlock);
+	}
+
+	fread(buffer, fileLength - i, 1, inputFile);
+	buffer[fileLength-i] = '\0';
+
+	fclose(inputFile);
+	
+
 	gettimeofday(&final, NULL);
 
 	long seconds = final.tv_sec - initial.tv_sec;
 	long microSeconds = final.tv_usec - initial.tv_usec;
 
-	double totalTime = seconds + microSeconds * 1000000;
+	double totalTime = seconds + (microSeconds + 1) / 1000000.0;
 	double dataRate = (totalBytes /1024.0) / totalTime;
 
 	cout << "Completed transfer of " << totalBytes << " bytes in " << totalTime << "  seconds (" << dataRate << " kB/s)"; 
@@ -134,6 +185,35 @@ void ExampleFileTransfer::dataReceived(string source, string data){
 
 	cout << "Message Received From (" << source << "): " << data << "\n";
 
+
+	if(outputFile == NULL){
+		stringstream fileTransferInformation(data);
+		string header;
+		fileTransferInformation >> header;
+		if(header == "BEGIN FILE TRANSFER"){
+			
+			
+			string fileName;
+			fileTransferInformation >> fileName;
+		
+			long fileSize;
+			fileTransferInformation >> fileSize;
+			totalFileSize = fileSize;
+			totalBytesWritten = 0;
+
+			fopen(fileName.c_str(), "rw");		
+						
+		}
+	}else{
+		if(totalBytesWritten < totalFileSize){
+			fwrite(data.c_str(), data.length(), 1, outputFile);
+			totalBytesWritten+=data.length();
+		}else{
+			fclose(outputFile);
+		}
+		
+
+	}
 }
 
 void ExampleFileTransfer::cleanupNetworkLayer(){
