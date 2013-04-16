@@ -1,4 +1,4 @@
-#include "example_chat.h"
+#include "example_file_transfer.h"
 
 
 using namespace std;
@@ -6,14 +6,14 @@ using namespace std;
 
 void ExampleFileTransfer::displayWelcomeMessage(){
 	cout << "    __  ______     __ __ ____________   ____________    ______\n";
-	cout << "   / / / / __ \   / // /<  <  / ____/  / ____/  _/ /   / ____/\n";
-	cout << "  / /_/ / /_/ /  / // /_/ // /___ \   / /_   / // /   / __/   \n";
+	cout << "   / / / / __ \\   / // /<  <  / ____/  / ____/  _/ /   / ____/\n";
+	cout << "  / /_/ / /_/ /  / // /_/ // /___ \\   / /_   / // /   / __/   \n";
 	cout << " / __  / ____/  /__  __/ // /___/ /  / __/ _/ // /___/ /___   \n";
 	cout << "/_/ /_/_/         /_/ /_//_/_____/  /_/   /___/_____/_____/   \n";
 	cout << "\n";                                                              
 	cout << "  __________  ___    _   _______ ________________ \n";
-	cout << " /_  __/ __ \/   |  / | / / ___// ____/ ____/ __ \ \n";
-	cout << "  / / / /_/ / /| | /  |/ /\__ \/ /_  / __/ / /_/ / \n";
+	cout << " /_  __/ __ \\/   |  / | / / ___// ____/ ____/ __ \\ \n";
+	cout << "  / / / /_/ / /| | /  |/ /\\__ \\/ /_  / __/ / /_/ / \n";
 	cout << " / / / _, _/ ___ |/ /|  /___/ / __/ / /___/ _, _/  \n";
 	cout << "/_/ /_/ |_/_/  |_/_/ |_//____/_/   /_____/_/ |_|   \n";
                                                   
@@ -40,12 +40,17 @@ int ExampleFileTransfer::getUserSelection(){
 
 	return selection;
 }
-
+	
 void ExampleFileTransfer::handleListUsers(){
 	cout << "\n";
 	cout << "Here is a list of users available\n";
-	for(int i = 0 ; i < 10; i++){
-
+	int currentAddressNumber= 1;
+	vector<string> allAddresses = networkLayer->getAllNodeAddresses();
+	for(string &currentNetworkAddress : allAddresses){
+		cout << currentAddressNumber << ". ";
+		cout << currentNetworkAddress;
+		cout << "\n";
+		currentAddressNumber++;
 	}	
 	cout << "\n";
 }
@@ -66,28 +71,37 @@ void ExampleFileTransfer::displayFileNameRequestMessage(){
 	cout << "Please input the name of the file you wish to send: ";
 }
 
+
+
 int ExampleFileTransfer::validateAddress(int address){
 	// Just check if the computer is reachable
-	return 0;	
+	vector<string> allAddresses = networkLayer->getAllNodeAddresses();
+	if(address >= 1 && address <= allAddresses.size()){
+		return 0;
+	}	
+	return 1;
 }
 
-void handleFileTransfer(string destinationAddress, string fileName){
+
+string ExampleFileTransfer::lookupAddress(int addressIndex){
+	vector<string> allAddresses = networkLayer->getAllNodeAddresses();
+	return allAddresses[addressIndex - 1];
+}
+
+
+void ExampleFileTransfer::handleFileTransfer(string destinationAddress, string fileName){
 	struct timeval initial, final;
 
 	gettimeofday(&initial, NULL);
 	
 	long totalBytes = 0;
 
-	
-	
-	
-
 	gettimeofday(&final, NULL);
 
 	long seconds = final.tv_sec - initial.tv_sec;
 	long microSeconds = final.tv_usec - initial.tv_usec;
 
-	double totalTime = seconds + microseconds * 1000000;
+	double totalTime = seconds + microSeconds * 1000000;
 	double dataRate = (totalBytes /1024.0) / totalTime;
 
 	cout << "Completed transfer of " << totalBytes << " bytes in " << totalTime << "  seconds (" << dataRate << " kB/s)"; 
@@ -100,7 +114,9 @@ void ExampleFileTransfer::handleSendFile(){
 	if(validateAddress(address) == 0){ // Success
 		displayFileNameRequestMessage();
 		string fileName = getUserString();
-		handleFileTransfer(address, fileName);
+		string actualAddress = lookupAddress(address);
+		handleFileTransfer(actualAddress, fileName);
+
 	}else{
 		cout << "The address you entered does not appear to be that of a chatter, please try again later\n";
 	}
@@ -124,7 +140,7 @@ void ExampleFileTransfer::cleanupNetworkLayer(){
 	delete networkLayer;
 }
 
-void ExampleFileTransfer::runChatSession(){
+void ExampleFileTransfer::runFileTransferSession(){
 	initNetworkLayer();
 
 	displayWelcomeMessage();
@@ -135,9 +151,9 @@ void ExampleFileTransfer::runChatSession(){
 		displayOptions();
 		choice = getUserSelection();	
 		if(choice == 1){
-			handleListChatters();
+			handleListUsers();
 		}else if(choice == 2){
-			handleSendMessage();
+			handleSendFile();
 		}
 	}
 	cleanupNetworkLayer();
@@ -147,8 +163,8 @@ void ExampleFileTransfer::runChatSession(){
 
 int main(int argc, char ** argv){
 	
-	ExampleFileTransfer exampleChat;
-	exampleChat.runChatSession();	
+	ExampleFileTransfer exampleFileTransfer;
+	exampleFileTransfer.runFileTransferSession();	
 
 	return 0;
 }

@@ -1,5 +1,8 @@
 #include <iostream>
 #include "dvrp_network_layer.h"
+#include <time.h>
+
+#include <sys/time.h>
 
 #ifndef INCLUDE_EXAMPLE_FILE_TRANSFER
 #define INCLUDE_EXAMPLE_FILE_TRANSFER
@@ -27,7 +30,7 @@ class ExampleFileTransfer : DVRPNetworkLayerDelegate{
 		void handleFileTransfer(string destinationAddress, string fileName);
 	public:
 		void dataReceived(string source, string data);	
-		void runFileTranferSession();	
+		void runFileTransferSession();	
 		
 
 };
