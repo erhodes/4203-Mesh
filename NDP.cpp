@@ -172,10 +172,13 @@ void NDP::beacon(){
   // beacon loop
   while(running){
     // transmit beacon
-    wlan.send("ff:ff:ff:ff:ff:ff", "<BEACON>");
-    // Sleep
-    chrono::milliseconds dura(beaconDelay);
-    this_thread::sleep_for(dura);
+    	time_t seconds;
+	seconds = time(NULL);
+	cout << "SENDING OUT A BEACON "  << "\n";
+    	wlan.send("ff:ff:ff:ff:ff:ff", "<BEACON>");
+    	// Sleep
+    	chrono::milliseconds dura(beaconDelay);
+    	this_thread::sleep_for(dura);
   }
   return;
 }

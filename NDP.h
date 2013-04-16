@@ -9,6 +9,8 @@
 #include <chrono>
 #include <mutex>
 
+#include <time.h>
+
 #include "MessageHandler.h"
 #include "WLAN.h"
 #include "Neighbor.h"
@@ -19,10 +21,10 @@ using namespace std;
 class NDP: public MessageHandler{
 
   // Constants
-  static const int updateMinDelay = 100;
-  static const int updateMaxDelay = 300;
+  static const int updateMinDelay = 1000;
+  static const int updateMaxDelay = 2000;
   static const int beaconDelay = 1000;
-  static const int maxAge = 100;
+  static const int maxAge = 10;
 
 // Public Member Functions
 public:
