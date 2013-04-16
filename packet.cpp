@@ -100,11 +100,17 @@ string Packet::getType() const{
 
 // Returns whether or not this packet is expired by looking at the associated time of expiry
 bool Packet::isExpired() const{
+	/*	
 	time_t now;
 	time_t then = getTimeSent();
 	time(&now);
 	double difference=difftime(now, then);
 	if(difference >  getLifeTime()){
+		return true;
+	}
+	return false;
+	*/
+	if(hopCount > 30){
 		return true;
 	}
 	return false;

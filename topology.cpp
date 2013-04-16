@@ -91,7 +91,7 @@ int main(int argc, char ** argv){
 	}else if(mac == F){
 		if(topology == 1){
 			cout << "RIGHT BLACKLIST\n";
-			blacklist(&topologyFile,"abd");
+			blacklist(&topologyFile,"ad");
 		}else if(topology == 2){
 			blacklist(&topologyFile,"abd");
 		}
