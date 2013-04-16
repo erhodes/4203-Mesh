@@ -22,7 +22,7 @@ class NDP: public MessageHandler{
   static const int updateMinDelay = 100;
   static const int updateMaxDelay = 300;
   static const int beaconDelay = 100;
-  static const int maxAge = 5;
+  static const int maxAge = 10;
 
 // Public Member Functions
 public:
