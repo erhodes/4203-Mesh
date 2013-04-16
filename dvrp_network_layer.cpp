@@ -111,7 +111,8 @@ void DVRPNetworkLayer::updateRoutingTable(string routingVector, string source){
 	if(numberOfEntries != -1){ // If there was no weird parsing error
         
 //	routingTable->deleteNode(source);
-        
+	string myAddress = WLAN::getInstance()->getAddress();        
+
 	vector<string> vectorDestinations;
 
 	routingTable->newRoute(source,source,1);
@@ -125,8 +126,9 @@ void DVRPNetworkLayer::updateRoutingTable(string routingVector, string source){
 
 			int distance;
 			routingVectorStream >> distance;
-			
-			routingTable->newRoute(destination, source, distance + 1);
+			if(destination != myAddress){	
+				routingTable->newRoute(destination, source, distance + 1);
+			}
 		}
         
 	vector<string> destinations = routingTable->getAllDestinations();
@@ -152,8 +154,6 @@ void DVRPNetworkLayer::updateRoutingTable(string routingVector, string source){
 
 // Tells our closest neighbours about how fast we can get to other destinations
 void DVRPNetworkLayer::advertiseRoutingTable(){
-
-	
 	string myAddress= WLAN::getInstance()->getAddress();
 
 	vector <string> neighbours = neighbourDiscovery->getAddresses();
