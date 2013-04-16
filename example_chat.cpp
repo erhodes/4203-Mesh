@@ -41,12 +41,10 @@ void ExampleChat::handleListChatters(){
 	int currentAddressNumber= 1;
 	vector<string> allAddresses = networkLayer->getAllNodeAddresses();
 	for(string &currentNetworkAddress : allAddresses){
-		if(currentNetworkAddress != networkLayer->getMyNetworkAddress()){
-			cout << currentAddressNumber << ". ";
-			cout << currentNetworkAddress;
-			cout << "\n";
-			currentAddressNumber++;
-		}
+		cout << currentAddressNumber << ". ";
+		cout << currentNetworkAddress;
+		cout << "\n";
+		currentAddressNumber++;
 	}
 	cout << "\n";
 }

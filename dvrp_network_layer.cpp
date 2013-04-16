@@ -15,7 +15,20 @@ DVRPNetworkLayer::DVRPNetworkLayer(){
 }
 
 vector<string> DVRPNetworkLayer::getAllNodeAddresses(){
-	return routingTable->getAllDestinations();
+	string myNetworkAddress = WLAN::getInstance()->getAddress();
+	vector<string> destinations = routingTable->getAllDestinations();
+	int myNetworkAddressIndex = -1;
+	int index =0;
+	for(string &currentAddress: destinations){
+		if(currentAddress ==  myNetworkAddress){
+			myNetworkAddressIndex = index;
+		}
+		index ++;
+	}
+	if(myNetworkAddressIndex != -1){
+		destinations.erase(destinations.begin() + myNetworkAddressIndex);	
+	}
+	return destinations;
 }
 
 string DVRPNetworkLayer::getMyNetworkAddress(){
