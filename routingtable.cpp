@@ -113,11 +113,7 @@ void RoutingTable::deleteNode(string address){
     }
     //check to see if there are any other references to the address
     //if there are none, we delete that address entirely from the routing table
-    tableIterator = table.find(address);
-    map<string, int>* rowIterator = tableIterator->second;
-    if (rowIterator->size() == 0){
-        deleteDestination(address);
-    }
+    clearOldDestinations();
 }
 
 void RoutingTable::printTable(){
@@ -126,11 +122,24 @@ void RoutingTable::printTable(){
         cout << "Destination: " << it->first << endl;
         printSubTable(it->second);
     }
+    cout << endl;
 }
 
 void RoutingTable::printSubTable(map<string, int>* m){
     std::map<string,int>::iterator it = m->begin();
     for (it = m->begin(); it!=m->end();++it){
         cout << it->first << ": " << it->second << endl;
+    }
+}
+
+//this function goes through the table, and deletes and destinations that have no routes to them
+void RoutingTable::clearOldDestinations(){
+    std::map<string, map<string, int>* >::iterator tableIterator = table.begin();
+    while(tableIterator != table.end()){
+        if (tableIterator->second->size() == 0){
+            //stuff
+            table.erase(tableIterator);
+        }
+        tableIterator++;
     }
 }

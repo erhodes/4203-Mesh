@@ -24,6 +24,7 @@ protected:
     map<string, map<string, int>* > table;
 
     void printSubTable(map<string, int> *m);
+    void clearOldDestinations();
 };
 
 #endif // ROUTINGTABLE_H
