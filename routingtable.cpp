@@ -84,7 +84,7 @@ int RoutingTable::getBestDistance(string destination){
     //set up an iterator pointing to the table row for the destination
     std::map<string, map<string, int>* >::iterator tableIterator = table.find(destination);
     if (tableIterator == table.end()){
-        return -1;
+        return 1000;
     }
     else{
         //if the program gets here, it means that the destination exists in the routing table
@@ -106,7 +106,7 @@ int RoutingTable::getBestDistanceExcluding(string destination, string direction)
     //set up an iterator pointing to the table row for the destination
     std::map<string, map<string, int>* >::iterator tableIterator = table.find(destination);
     if (tableIterator == table.end()){
-        return -1;
+        return 1000;
     }
     else{
         //if the program gets here, it means that the destination exists in the routing table
@@ -120,9 +120,6 @@ int RoutingTable::getBestDistanceExcluding(string destination, string direction)
             }
             rowIterator++;
         }
-	if(result == 1000){
-		return -1;
-	}
         return result;
     }
 }

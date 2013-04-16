@@ -174,16 +174,20 @@ string DVRPNetworkLayer::serializeShortestPathsForDestination(string destination
 	vector <string> neighbours = routingTable->getAllDestinations();
           
 	int routingVectorSize = neighbours.size();
+
+	for(string &currentDestinationAddress: neighbours){	
+		int distance =              routingTable->getBestDistanceExcluding(currentDestinationAddress, destination);
+		if(distance == 1000 ){
+			routingVectorSize--;
+		}
+	}
+
 	serialization << routingVectorSize;
 	serialization << delimiter2;
 	for(string &currentDestinationAddress: neighbours){	
-		
 		string optimumLeavingNode = routingTable->getBestRouteExcluding(currentDestinationAddress, destination);
 		int distance =              routingTable->getBestDistanceExcluding(currentDestinationAddress, destination);
-		if(distance != -1){
-			cout<<"start printTable()\n";	
-			routingTable->printTable();
-			cout<<"end printTable()\n";
+		if(distance!=1000){	
 			serialization << currentDestinationAddress;
 			serialization << delimiter1;
 			serialization << distance;
@@ -210,13 +214,10 @@ string DVRPNetworkLayer::serializeShortestPaths(){
 	for(string &currentDestinationAddress: neighbours){	
 		string optimumLeavingNode = routingTable->getBestRoute(currentDestinationAddress);
 		int distance = routingTable->getBestDistance(currentDestinationAddress);
-		cout<<"start printTable()\n";	
-		routingTable->printTable();
-		cout<<"end printTable()\n";
-		serialization << currentDestinationAddress;
-		serialization << delimiter1;
-		serialization << distance;
-		serialization << delimiter2;
+			serialization << currentDestinationAddress;
+			serialization << delimiter1;
+			serialization << distance;
+			serialization << delimiter2;
 	}
 	return serialization.str();
 }
@@ -226,9 +227,7 @@ string DVRPNetworkLayer::serializeShortestPaths(){
 // 	sourceAddress - The neighbour who sent us the packet
 //	destinationAddress - Should always be our mac address
 void DVRPNetworkLayer::handleMessage(string sourceAddress, string destinationAddress, string data){
-	cout << "START PACKET RECEIVED\n";
 	cout << data;
-	cout << "END PACKET RECEIVED\n";
 	PacketFactory factory;
 	Packet * packet = factory.createPacket(data);
 	if(packet){
