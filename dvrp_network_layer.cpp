@@ -112,26 +112,38 @@ void DVRPNetworkLayer::updateRoutingTable(string routingVector, string source){
         
 //	routingTable->deleteNode(source);
         
+	vector<string> vectorDestinations;
+
 	routingTable->newRoute(source,source,1);
 		for(int i = 0 ; i < numberOfEntries; i++){
+						
 
 			string destination;
 			routingVectorStream >> destination;
+
+			vectorDestinations.push_back(destination);
 
 			int distance;
 			routingVectorStream >> distance;
 			
 			routingTable->newRoute(destination, source, distance + 1);
 		}
-        /*
-        for(each destination in our current routing table with direction B){
-
-                if(routingVector does not have a route to the destination){
-                    routingTable->deleteRoute(destination, source);
+        
+	vector<string> destinations = routingTable->getAllDestinations();
+        for(string &currentDestination : destinations){
+		bool found = false;
+		for(string &someVectorDestination : vectorDestinations){
+			if(currentDestination == someVectorDestination){
+				found =true;
+				break;
+			}
+		}
+	
+                if(!found){ // If we could not find a certain route to a certain destination in the routing vector
+                    routingTable->deleteRoute(currentDestination, source);
                 }
-
         }
-        */
+        
 
 	}
 		
