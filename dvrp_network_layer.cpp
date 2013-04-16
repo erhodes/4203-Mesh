@@ -109,13 +109,11 @@ void DVRPNetworkLayer::updateRoutingTable(string routingVector, string source){
 	stringstream routingVectorStream(routingVector); // Create a stringstream that will be used for parsing the routing vector
 	routingVectorStream >> numberOfEntries; // Parse the number of entries in the routing table
 	if(numberOfEntries != -1){ // If there was no weird parsing error
-        
-//	routingTable->deleteNode(source);
-	string myAddress = WLAN::getInstance()->getAddress();        
+		
+		string myAddress = WLAN::getInstance()->getAddress();        
 
-	vector<string> vectorDestinations;
-
-	routingTable->newRoute(source,source,1);
+		vector<string> vectorDestinations;
+		
 		for(int i = 0 ; i < numberOfEntries; i++){
 						
 
@@ -130,21 +128,21 @@ void DVRPNetworkLayer::updateRoutingTable(string routingVector, string source){
 				routingTable->newRoute(destination, source, distance + 1);
 			}
 		}
-        
-	vector<string> destinations = routingTable->getAllDestinations();
-        for(string &currentDestination : destinations){
-		bool found = false;
-		for(string &someVectorDestination : vectorDestinations){
-			if(currentDestination == someVectorDestination){
-				found =true;
-				break;
+		
+		vector<string> destinations = routingTable->getAllDestinations();
+		for(string &currentDestination : destinations){
+			bool found = false;
+			for(string &someVectorDestination : vectorDestinations){
+				if(currentDestination == someVectorDestination){
+					found =true;
+					break;
+				}
+			}
+		
+			if(!found){ // If we could not find a certain route to a certain destination in the routing vector
+			   // routingTable->deleteRoute(currentDestination, source);
 			}
 		}
-	
-                if(!found){ // If we could not find a certain route to a certain destination in the routing vector
-                    routingTable->deleteRoute(currentDestination, source);
-                }
-        }
         
 
 	}
@@ -155,7 +153,7 @@ void DVRPNetworkLayer::updateRoutingTable(string routingVector, string source){
 // Tells our closest neighbours about how fast we can get to other destinations
 void DVRPNetworkLayer::advertiseRoutingTable(){
 	string myAddress= WLAN::getInstance()->getAddress();
-
+	routingTable->printTable();
 	vector <string> neighbours = neighbourDiscovery->getAddresses();
 	for(string &currentDestinationAddress: neighbours){
 		string routingVector = serializeShortestPathsForDestination(currentDestinationAddress);
