@@ -153,16 +153,47 @@ void DVRPNetworkLayer::updateRoutingTable(string routingVector, string source){
 // Tells our closest neighbours about how fast we can get to other destinations
 void DVRPNetworkLayer::advertiseRoutingTable(){
 
-	string routingVector = serializeShortestPaths();
+	
 	string myAddress= WLAN::getInstance()->getAddress();
 
 	vector <string> neighbours = neighbourDiscovery->getAddresses();
 	for(string &currentDestinationAddress: neighbours){
+		string routingVector = serializeShortestPathsForDestination(currentDestinationAddress);
 		RoutingPacket routingTablePacket(0, 5, myAddress, currentDestinationAddress, routingVector); // Construct the packet data
 		string packetData = routingTablePacket.toString(); // Construct the packet data
 		sendRawData(currentDestinationAddress, packetData); // Send the packet data
 	}
 }
+
+// Creates a serialized version of the most optimal routes in the routing table
+string DVRPNetworkLayer::serializeShortestPathsForDestination(string destination){
+	string delimiter1 = " ";
+	string delimiter2 = "\n";
+	stringstream serialization;
+	
+	vector <string> neighbours = routingTable->getAllDestinations();
+          
+	int routingVectorSize = neighbours.size();
+	serialization << routingVectorSize;
+	serialization << delimiter2;
+	for(string &currentDestinationAddress: neighbours){	
+		
+		string optimumLeavingNode = routingTable->getBestRouteExcluding(currentDestinationAddress, destination);
+		int distance =              routingTable->getBestDistanceExcluding(currentDestinationAddress, destination);
+		if(distance != -1){
+			cout<<"start printTable()\n";	
+			routingTable->printTable();
+			cout<<"end printTable()\n";
+			serialization << currentDestinationAddress;
+			serialization << delimiter1;
+			serialization << distance;
+			serialization << delimiter2;
+		}
+	}
+	return serialization.str();
+}
+
+
 
 // Creates a serialized version of the most optimal routes in the routing table
 string DVRPNetworkLayer::serializeShortestPaths(){

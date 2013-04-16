@@ -52,6 +52,8 @@ private:
 	void advertiseRoutingTable();
 
 	string serializeShortestPaths();
+	
+	string serializeShortestPathsForDestination(string destination);
 
 	void updateRoutingTable(string routingVector, string source);
 
