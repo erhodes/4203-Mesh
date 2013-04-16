@@ -173,8 +173,8 @@ void NDP::beacon(){
   while(running){
     // transmit beacon
     	time_t seconds;
-	seconds = time(NULL);
-	cout << "SENDING OUT A BEACON "  << "\n";
+    seconds = time(NULL);
+    //cout << "SENDING OUT A BEACON "  << "\n";
     	wlan.send("ff:ff:ff:ff:ff:ff", "<BEACON>");
     	// Sleep
     	chrono::milliseconds dura(beaconDelay);

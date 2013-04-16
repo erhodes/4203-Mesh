@@ -18,7 +18,9 @@
 
 // C++ Headers
 #include <iostream>
+#include <fstream>
 #include <string>
+#include <vector>
 #include "MessageHandler.h"
 
 using namespace std;
@@ -52,7 +54,7 @@ class WLAN{
     WLANAddr srcAddr;
 
 
-	// type
+    // type
     unsigned short type;
   };
 
@@ -101,7 +103,7 @@ private:
   // convert a char to a hex digit
   static int hexdigit(char a);
 
-  // convert an address string to a series of hex digits  
+  // convert an address string to a series of hex digits
   static int sscanf6(char str[], int *a1, int *a2, int *a3, int *a4, int *a5,
     int *a6);
 
@@ -109,7 +111,7 @@ private:
   bool init();
 
   // receive
-  void receive(); 
+  void receive();
 
 // Private Data Members
 private:
@@ -121,6 +123,7 @@ private:
   WLANHeader hdr;
   bool running;
   MessageHandler* messageHandler;
+  vector<string> blacklist;
 
 };
 

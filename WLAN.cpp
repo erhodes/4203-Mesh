@@ -14,14 +14,14 @@ WLAN* WLAN::instance = 0;
 // return the address in a human readable form
 char * WLAN::WLANAddr::wlan2asc(){
    static char str[32];
-   sprintf(str, "%x:%x:%x:%x:%x:%x", 
+   sprintf(str, "%x:%x:%x:%x:%x:%x",
       data[0],data[1],data[2],data[3],data[4],data[5]);
    return str;
 }
 
 // defined the address from a human readable form
 int WLAN::WLANAddr::str2wlan(char s[]){
-   int a[6], i;  
+   int a[6], i;
    // parse the address
    if (sscanf6(s, a, a+1, a+2, a+3, a+4, a+5) < 6){
       return -1;
@@ -47,9 +47,22 @@ WLAN::WLAN(string interface){
   memcpy(device, interface.c_str(), interface.length());
   running = false;
   messageHandler = 0;
+  // load blacklist
+  string line;
+  ifstream fstr ("blacklist.txt");
+  if(!fstr.is_open()){
+    cout << "Error: could not open blacklist.txt" << endl;
+    exit(-1);
+  }
+  // read lines
+  while(fstr.good()){
+    getline (fstr, line);
+    blacklist.push_back(line);
+  }
+  fstr.close();
   // init
   if (!init()){
-  // error occurred    
+  // error occurred
     exit(-1);
   }
 }
@@ -83,7 +96,7 @@ void WLAN::stop(){
     // close socket
     if (ifconfig.sockid != -1){
       close(ifconfig.sockid);
-    } 
+    }
     // free buffer
     delete buff;
   }
@@ -100,7 +113,7 @@ string WLAN::getAddress(){
   return addr;
 }
 
-// convert a char to a hex digit 
+// convert a char to a hex digit
 int WLAN::hexdigit(char a){
   if (a >= '0' && a <= '9') return(a-'0');
   if (a >= 'a' && a <= 'f') return(a-'a'+10);
@@ -138,7 +151,7 @@ bool WLAN::init(){
   // - AF_PACKET : packet interface on device level
   // - SOCK_RAW : raw packets including link level header
   // - ETH_P_ALL : all frames will be received
-  if ((ifconfig.sockid = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL))) == -1){ 
+  if ((ifconfig.sockid = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL))) == -1){
     printf("cannot open socket: %s\n", strerror(errno));
     return false;
   }
@@ -167,10 +180,10 @@ bool WLAN::init(){
   memset(&mr,0,sizeof(mr));
   mr.mr_ifindex = ifconfig.ifindex;
   mr.mr_type =  PACKET_MR_PROMISC;
-  if (setsockopt(ifconfig.sockid, SOL_PACKET, PACKET_ADD_MEMBERSHIP, 
+  if (setsockopt(ifconfig.sockid, SOL_PACKET, PACKET_ADD_MEMBERSHIP,
       (char *)&mr, sizeof(mr)) < 0){
-    printf("WLANProtocol, failed to add the promiscuous mode: %s\n", 
-    strerror(errno)); 
+    printf("WLANProtocol, failed to add the promiscuous mode: %s\n",
+    strerror(errno));
     return false;
   }
   // bind the socket to the interface
@@ -181,9 +194,9 @@ bool WLAN::init(){
   sll.sll_ifindex = ifconfig.ifindex;
   sll.sll_protocol = htons(ETH_P_ALL);
   if (bind(ifconfig.sockid, (struct sockaddr*)&sll, sizeof(sll)) < 0){
-    printf("WLANProtocol, failed to bind the socket: %s\n", strerror(errno)); 
+    printf("WLANProtocol, failed to bind the socket: %s\n", strerror(errno));
     return false;
-  }  
+  }
   return true;
 }
 
@@ -210,7 +223,7 @@ bool WLAN::send(string address, string message){
   memmove(&hdr.srcAddr, ifconfig.hwaddr.data, WLAN_ADDR_LEN);
   // set the type field
   hdr.type = htons(IP_TYPE);
-  // store the header into the message 
+  // store the header into the message
   memmove(buff, &hdr, WLAN_HEADER_LEN);
   // store the payload
   memmove(buff+WLAN_HEADER_LEN, dp, strlen(dp));
@@ -220,10 +233,10 @@ bool WLAN::send(string address, string message){
   to.sll_family = AF_PACKET;
   to.sll_ifindex = ifconfig.ifindex;
   memmove(&(to.sll_addr), daddr.data, WLAN_ADDR_LEN);
-  to.sll_halen = 6;  
+  to.sll_halen = 6;
   // send a frame
   int sentlen = sendto(
-    ifconfig.sockid, buff, WLAN_HEADER_LEN+strlen(dp), 0, 
+    ifconfig.sockid, buff, WLAN_HEADER_LEN+strlen(dp), 0,
     (sockaddr *) &to, tolen);
   // release memory
   delete rp;
@@ -242,9 +255,9 @@ void WLAN::receive(){
   buff = new unsigned char[ifconfig.mtu];
   // frame length
   unsigned int i; // frame length
-  // src address of message  
+  // src address of message
   struct sockaddr_ll from; // source address of the  message
-  socklen_t fromlen = sizeof(struct sockaddr_ll); 
+  socklen_t fromlen = sizeof(struct sockaddr_ll);
   int error;
   // receive loop
   while(running){
@@ -254,7 +267,7 @@ void WLAN::receive(){
       memset(buff, 0, ifconfig.mtu);
       // wait and receive a frame
       fromlen = sizeof(from);
-      i = recvfrom(ifconfig.sockid, buff, ifconfig.mtu, 0, 
+      i = recvfrom(ifconfig.sockid, buff, ifconfig.mtu, 0,
         (struct sockaddr *) &from, &fromlen);
       if (i == -1){
         printf("cannot receive data: %s\n", strerror(errno));
@@ -283,9 +296,9 @@ void WLAN::receive(){
     // get message
     string message((char*)(buff + sizeof(WLANHeader)));
 
-	// check destination
+    // check destination
     if(destination != getAddress() && destination != WLAN_BROADCAST){
-	continue;
+    continue;
     }
     // check header
     if(WLAN_HEADER == message.substr(0, WLAN_HEADER.length())){
@@ -295,9 +308,22 @@ void WLAN::receive(){
     else{
       continue;
     }
+
+    // check blacklist
+    bool blackListed = false;
+    for(auto &a: blacklist){
+      if(source == a){
+        blackListed = true;
+        break;
+      }
+    }
+    if(blackListed){
+      continue;
+    }
+
     // handle message
     if(messageHandler != 0){
       messageHandler->handleMessage(source, destination, message);
-    }  
+    }
   }
 }

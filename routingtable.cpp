@@ -111,6 +111,13 @@ void RoutingTable::deleteNode(string address){
         row->erase(address);
         tableIterator++;
     }
+    //check to see if there are any other references to the address
+    //if there are none, we delete that address entirely from the routing table
+    tableIterator = table.find(address);
+    map<string, int>* rowIterator = tableIterator->second;
+    if (rowIterator->size() == 0){
+        deleteDestination(address);
+    }
 }
 
 void RoutingTable::printTable(){
