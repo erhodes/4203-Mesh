@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <stdio.h>
 #include <sstream>
 using namespace std;
@@ -95,14 +96,11 @@ int main(int argc, char ** argv){
 			blacklist(&topologyFile,"abd");
 		}
 		cout << "WOOT\n";			
-	}
-
-
-	FILE * f = fopen("blacklist.txt", "rw");
-	string stringToBeWritten = topologyFile.str();
-	cout << "string to file: " << stringToBeWritten << "\n";
-	const char * charactersToBeWritten = stringToBeWritten.c_str();
-	fwrite(charactersToBeWritten, stringToBeWritten.length(),1,f);
-	fclose(f);
-	return 0;
+    }
+    ofstream myfile;
+    myfile.open("blacklist.txt");
+    string stringToBeWritten = topologyFile.str();
+    myfile << stringToBeWritten;
+    myfile.close();
+    return 0;
 }
