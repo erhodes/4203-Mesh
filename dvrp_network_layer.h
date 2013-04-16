@@ -45,6 +45,7 @@ public:
 	string getMyNetworkAddress();
 
 private:
+	bool vectorIsMissingRoute(string vector);	
 
 	void sendRawData(string destination, string data);
 

@@ -1,4 +1,4 @@
-all: NDP.o Neighbor.o WLAN.o MessageHandler.o test chat
+all: NDP.o Neighbor.o WLAN.o MessageHandler.o test chat topology
 
 chat: packet.o data_packet.o routing_packet.o packet_factory.o dvrp_network_layer.o routingtable.o example_chat.o NDP.o Neighbor.o WLAN.o MessageHandler.o
 	g++ -std=c++0x -pthread packet.o data_packet.o routing_packet.o packet_factory.o dvrp_network_layer.o routingtable.o example_chat.o NDP.o Neighbor.o WLAN.o MessageHandler.o -o chat
@@ -46,12 +46,10 @@ MessageHandler.o: MessageHandler.h MessageHandler.cpp
 	g++ -std=c++0x -c MessageHandler.cpp
 
 topology: topology.cpp
-	g++ topology.cpp -o topology
-
-
+	g++ topology.cpp -o topology	
 clean:
 	rm -f *.o
-	rm -rf test chat file
+	rm -rf test chat file topology blacklist.txt
 
 
 

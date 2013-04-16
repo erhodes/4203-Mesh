@@ -89,6 +89,19 @@ void DVRPNetworkLayer::forwardPacket(Packet * p){
 	}
 }
 
+bool DVRPNetworkLayer::vectorIsMissingRoute(string vector){
+	stringstream vectorParser(vector);
+	int vectorCount;
+	vectorParser >> vectorCount;
+	int myDestinationsCount = routingTable->getAllDestinations().size();	
+
+	if(vectorCount != myDestinationsCount){
+		return true;
+	}	
+	return false;
+}
+
+
 // Updates our routing table using the information that source has cerain
 // distances to other nodes as per the included routing table
 void DVRPNetworkLayer::updateRoutingTable(string routingVector, string source){
@@ -198,7 +211,7 @@ void DVRPNetworkLayer::handleMessage(string sourceAddress, string destinationAdd
 
 				string shortestPathSerializedFinal = serializeShortestPaths(); // Figure out our most optimal paths right now
 				cout << "DIFF: {" << shortestPathSerializedInitial << "} WITH: {" << shortestPathSerializedFinal << "}\n";	
-				if(shortestPathSerializedInitial != shortestPathSerializedFinal){ // If the routing vector we received actually caused us to find a shorter path to a destination
+				if(shortestPathSerializedInitial != shortestPathSerializedFinal || vectorIsMissingRoute(routingVector)){ // If the routing vector we received actually caused us to find a shorter path to a destination
 					cout << "FOUND THEM TO BE DIFFERENT SO WE ARE ADVERTISING AGAIN!\n";
 					advertiseRoutingTable();
 				}
