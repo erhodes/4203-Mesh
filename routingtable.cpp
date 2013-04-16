@@ -53,6 +53,7 @@ string RoutingTable::getBestRoute(string destination){
             }
             rowIterator++;
         }
+	
         return result;
     }
 }
@@ -119,6 +120,9 @@ int RoutingTable::getBestDistanceExcluding(string destination, string direction)
             }
             rowIterator++;
         }
+	if(result == 1000){
+		return -1;
+	}
         return result;
     }
 }
