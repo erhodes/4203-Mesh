@@ -13,7 +13,6 @@
 
 Packet::Packet(int packetNumberParam, int lifeTimeParam, string sourceAddressParam, string destinationAddressParam, string payloadParam){
 
-	cout << "Made it to the start of constructor\n";
 
 	time_t tempTime;
 	time(&tempTime);
@@ -32,7 +31,6 @@ Packet::Packet(int packetNumberParam, int lifeTimeParam, string sourceAddressPar
 
 	payload = payloadParam;
 
-	cout <<"Made it to end of constructor\n";
 }
 
 Packet::Packet(string packetData){
@@ -106,8 +104,6 @@ bool Packet::isExpired() const{
 	time_t then = getTimeSent();
 	time(&now);
 	double difference=difftime(now, then);
-	cout << "DIFFERENCE IN TIMES " << difference << "\n";
-	cout << "LIFETIME " << getLifeTime() << "\n";
 	if(difference >  getLifeTime()){
 		return true;
 	}
