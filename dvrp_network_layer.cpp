@@ -1,4 +1,4 @@
-#include "dvrp_network_layer.h"
+
 
 
 
@@ -93,6 +93,7 @@ bool DVRPNetworkLayer::vectorIsMissingRoute(string vector){
 	stringstream vectorParser(vector);
 	int vectorCount = 0;
 	vectorParser >> vectorCount;
+	vectorCount++;
 	int myDestinationsCount = routingTable->getAllDestinations().size();	
 	cout << "THEY HAVE THIS MANY DESTINATIONS: " << vectorCount << " I HAVE THIS MANY DESTINATIONS " << myDestinationsCount<<"\n";
 	if(vectorCount != myDestinationsCount){
