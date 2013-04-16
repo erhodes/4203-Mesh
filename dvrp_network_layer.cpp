@@ -91,10 +91,10 @@ void DVRPNetworkLayer::forwardPacket(Packet * p){
 
 bool DVRPNetworkLayer::vectorIsMissingRoute(string vector){
 	stringstream vectorParser(vector);
-	int vectorCount;
+	int vectorCount = 0;
 	vectorParser >> vectorCount;
 	int myDestinationsCount = routingTable->getAllDestinations().size();	
-
+	cout << "THEY HAVE THIS MANY DESTINATIONS: " << vectorCount << " I HAVE THIS MANY DESTINATIONS " << myDestinationsCount<<"\n";
 	if(vectorCount != myDestinationsCount){
 		return true;
 	}	
@@ -156,7 +156,7 @@ string DVRPNetworkLayer::serializeShortestPaths(){
 	string delimiter2 = "\n";
 	stringstream serialization;
 	
-	vector <string> neighbours = neighbourDiscovery->getAddresses();
+	vector <string> neighbours = routingTable->getAllDestinations();
           
 	
 	int routingVectorSize = neighbours.size();
