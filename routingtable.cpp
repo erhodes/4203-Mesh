@@ -57,6 +57,28 @@ string RoutingTable::getBestRoute(string destination){
     }
 }
 
+string RoutingTable::getBestRouteExcluding(string destination, string direction){
+    std::map<string, map<string, int>* >::iterator tableIterator = table.find(destination);
+    if (tableIterator == table.end()){
+        return "INVALID";
+    }
+    else{
+        //if the program gets here, it means that the destination exists in the routing table
+        int shortest = 1000;
+        string result;
+        map<string,int>* temp = tableIterator->second;
+        std::map<string, int>::iterator rowIterator = temp->begin();
+        while (rowIterator != temp->end()){
+            if (rowIterator->second < shortest && rowIterator->first != direction){
+                shortest = rowIterator -> second;
+                result = rowIterator ->first;
+            }
+            rowIterator++;
+        }
+        return result;
+    }
+}
+
 int RoutingTable::getBestDistance(string destination){
     //set up an iterator pointing to the table row for the destination
     std::map<string, map<string, int>* >::iterator tableIterator = table.find(destination);
@@ -71,6 +93,28 @@ int RoutingTable::getBestDistance(string destination){
         std::map<string, int>::iterator rowIterator = temp->begin();
         while(rowIterator != temp->end()){
             if(rowIterator->second < result){
+                result = rowIterator->second;
+            }
+            rowIterator++;
+        }
+        return result;
+    }
+}
+
+int RoutingTable::getBestDistanceExcluding(string destination, string direction){
+    //set up an iterator pointing to the table row for the destination
+    std::map<string, map<string, int>* >::iterator tableIterator = table.find(destination);
+    if (tableIterator == table.end()){
+        return -1;
+    }
+    else{
+        //if the program gets here, it means that the destination exists in the routing table
+        //and that tableIterator is pointing at it
+        int result = 1000;
+        map<string,int>* temp = tableIterator->second;
+        std::map<string, int>::iterator rowIterator = temp->begin();
+        while(rowIterator != temp->end()){
+            if( (rowIterator->second < result) && (rowIterator->first != direction) ){
                 result = rowIterator->second;
             }
             rowIterator++;

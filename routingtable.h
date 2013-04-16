@@ -16,6 +16,8 @@ public:
     void printTable();
     string getBestRoute(string destination);
     int getBestDistance(string destination);
+    string getBestRouteExcluding(string destination, string direction);
+    int getBestDistanceExcluding(string destination, string direction);
     vector<string> getAllDestinations();
     void deleteDestination(string destination);
     void deleteRoute(string destination, string direction);
