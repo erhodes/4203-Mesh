@@ -45,6 +45,10 @@ WLAN.o: WLAN.h WLAN.cpp
 MessageHandler.o: MessageHandler.h MessageHandler.cpp
 	g++ -std=c++0x -c MessageHandler.cpp
 
+topology: topology.cpp
+	g++ topology.cpp -o topology
+
+
 clean:
 	rm -f *.o
 	rm -rf test chat file
