@@ -143,7 +143,7 @@ string DVRPNetworkLayer::serializeShortestPaths(){
 	string delimiter2 = "\n";
 	stringstream serialization;
 	
-	vector <string> neighbours = neighbourDiscovery->getAddresses();
+	vector <string> neighbours = routingTable->getAllDestinations();
           
 	
 	int routingVectorSize = neighbours.size();
