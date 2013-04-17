@@ -51,7 +51,7 @@ topology: topology.cpp
 
 clean:
 	rm -f *.o
-	rm -rf test chat file
+	rm -rf test chat file topology
 
 
 

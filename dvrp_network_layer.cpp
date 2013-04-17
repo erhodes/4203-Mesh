@@ -50,7 +50,7 @@ void DVRPNetworkLayer::foundNeighbor(const string address){
 
 // Lost Neighbor
 void DVRPNetworkLayer::lostNeighbor(const string address){
-	cout << "lostNeighbor";
+	cout << "lostNeighbor()\n";
 	routingTable->deleteNode(address);
 	advertiseRoutingTable();
 }
@@ -96,7 +96,10 @@ void DVRPNetworkLayer::updateRoutingTable(string routingVector, string source){
 	stringstream routingVectorStream(routingVector); // Create a stringstream that will be used for parsing the routing vector
 	routingVectorStream >> numberOfEntries; // Parse the number of entries in the routing table
 	if(numberOfEntries != -1){ // If there was no weird parsing error
-        routingTable->deleteNode(source);
+        
+	string myAddress = WLAN::getInstance()->getAddress();
+	
+	routingTable->deleteNode(source);
         routingTable->newRoute(source,source,1);
 		for(int i = 0 ; i < numberOfEntries; i++){
 
@@ -105,8 +108,9 @@ void DVRPNetworkLayer::updateRoutingTable(string routingVector, string source){
 
 			int distance;
 			routingVectorStream >> distance;
-			
-			routingTable->newRoute(destination, source, distance + 1);
+			if(destination != myAddress){			
+				routingTable->newRoute(destination, source, distance + 1);
+			}
 		}
         /*
         for(each destination in our current routing table with direction B){
@@ -164,9 +168,6 @@ string DVRPNetworkLayer::serializeShortestPathsForDestination(string destination
 	for(string &currentDestinationAddress: neighbours){	
 		string optimumLeavingNode = routingTable->getBestRouteExcluding(currentDestinationAddress, destination);
 		int distance = routingTable->getBestDistanceExcluding(currentDestinationAddress, destination);
-		cout<<"start printTable()\n";	
-		routingTable->printTable();
-		cout<<"end printTable()\n";
 		if(distance!=1000){
 			serialization << currentDestinationAddress;
 			serialization << delimiter1;
@@ -193,9 +194,6 @@ string DVRPNetworkLayer::serializeShortestPaths(){
 	for(string &currentDestinationAddress: neighbours){	
 		string optimumLeavingNode = routingTable->getBestRoute(currentDestinationAddress);
 		int distance = routingTable->getBestDistance(currentDestinationAddress);
-		cout<<"start printTable()\n";	
-		routingTable->printTable();
-		cout<<"end printTable()\n";
 		serialization << currentDestinationAddress;
 		serialization << delimiter1;
 		serialization << distance;
