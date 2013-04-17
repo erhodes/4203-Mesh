@@ -133,7 +133,7 @@ void ExampleFileTransfer::handleFileTransfer(string destinationAddress, string f
 	char buffer[MAX_BLOCK_SIZE + 1];
 	buffer[MAX_BLOCK_SIZE] = '\0';
 	long i; 
-	for(i = 0; i < fileLength - MAX_BLOCK_SIZE; i++){
+	for(i = 0; i < fileLength - MAX_BLOCK_SIZE; i+=MAX_BLOCK_SIZE){
 		
 		fread(buffer, MAX_BLOCK_SIZE, 1, inputFile);
 		string nextFileBlock(buffer);
