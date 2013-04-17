@@ -44,11 +44,12 @@ public:
 
 	string getMyNetworkAddress();
 
+	void advertiseRoutingTable();
+
+	
 private:
 
 	void sendRawData(string destination, string data);
-
-	void advertiseRoutingTable();
 
 	string serializeShortestPaths();
 

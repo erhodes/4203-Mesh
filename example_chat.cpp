@@ -129,6 +129,8 @@ void ExampleChat::runChatSession(){
 			handleListChatters();
 		}else if(choice == 2){
 			handleSendMessage();
+		}else if(choice == 4){
+			networkLayer->advertiseRoutingTable();
 		}
 	}
 	cleanupNetworkLayer();
