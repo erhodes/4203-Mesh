@@ -62,13 +62,13 @@ int main(int argc, char ** argv){
 		if(topology == 1){
 			blacklist(&topologyFile, "cef");
 		}else if(topology == 2){
-			blacklist(&topologyFile, "cf");
+			blacklist(&topologyFile, "ecf");
 		}
 	}else if(mac == B){
 		if(topology == 1){
 			blacklist(&topologyFile, "cde");
 		}else if(topology == 2){
-			blacklist(&topologyFile, "dc");
+			blacklist(&topologyFile, "dcf");
 		}
 	}else if(mac == C){
 		if(topology == 1){
@@ -96,7 +96,7 @@ int main(int argc, char ** argv){
 			blacklist(&topologyFile,"abd");
 		}
 		cout << "WOOT\n";			
-    }
+    	}
     ofstream myfile;
     myfile.open("blacklist.txt");
     string stringToBeWritten = topologyFile.str();
