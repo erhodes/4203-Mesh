@@ -108,9 +108,9 @@ void DVRPNetworkLayer::updateRoutingTable(string routingVector, string source){
 
 			int distance;
 			routingVectorStream >> distance;
-			if(destination != myAddress){			
+            //if(destination != myAddress){
 				routingTable->newRoute(destination, source, distance + 1);
-			}
+        //	}
 		}
         /*
         for(each destination in our current routing table with direction B){

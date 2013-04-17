@@ -7,6 +7,9 @@ RoutingTable::RoutingTable(){
 
 void RoutingTable::newRoute(string destination, string direction, int distance){
     std::map<string, map<string, int>* >::iterator tableIterator = table.find(destination);
+    if (distance > 10){
+        return;
+    }
     if (tableIterator == table.end()){
         //adds a new element if the destination didn't previously exist
         map <string, int>* temp = new map <string, int>;
@@ -23,10 +26,8 @@ void RoutingTable::newRoute(string destination, string direction, int distance){
             temp->insert(std::pair<string,int>(direction,distance));
         }
         else{
-            //the route already existed, so update it's distance if its better
-            if (rowIterator->second > distance){
-                rowIterator->second = distance;
-            }
+            //the route already existed, so update it's distance
+            rowIterator->second = distance;
         }
     }
 }
