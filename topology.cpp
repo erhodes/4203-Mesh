@@ -63,30 +63,40 @@ int main(int argc, char ** argv){
 			blacklist(&topologyFile, "cef");
 		}else if(topology == 2){
 			blacklist(&topologyFile, "ecf");
+		}else if(topology == 3){
+			blacklist(&topologyFile, "d");
 		}
 	}else if(mac == B){
 		if(topology == 1){
 			blacklist(&topologyFile, "cde");
 		}else if(topology == 2){
 			blacklist(&topologyFile, "dcf");
+		}else if(topology == 3){
+			blacklist(&topologyFile, "d")
 		}
 	}else if(mac == C){
 		if(topology == 1){
 			blacklist(&topologyFile, "abde");
 		}else if(topology == 2){
 			blacklist(&topologyFile, "abd");
+		}else if(topology == 3){
+			blacklist(&topologyFile, "");
 		}
 	}else if(mac == D){
 		if(topology == 1){
 			blacklist(&topologyFile,"bcef");
 		}else if(topology == 2){
 			blacklist(&topologyFile,"bcf");
+		}else if(topology == 3){
+			blacklist(&topologyFile, "ab");
 		}
 	}else if(mac == E){
 		if(topology == 1){
 			blacklist(&topologyFile,"abcd");
 		}else if(topology == 2){
 			blacklist(&topologyFile, "a");
+		}else if(topology == 3){
+			blacklist(&topologyFile,"abcdefg");
 		}
 	}else if(mac == F){
 		if(topology == 1){
@@ -94,8 +104,9 @@ int main(int argc, char ** argv){
 			blacklist(&topologyFile,"ad");
 		}else if(topology == 2){
 			blacklist(&topologyFile,"abd");
+		}else if(topology == 3){
+			blacklist(&topologyFile, "abcdefg");
 		}
-		cout << "WOOT\n";			
     	}
     ofstream myfile;
     myfile.open("blacklist.txt");
