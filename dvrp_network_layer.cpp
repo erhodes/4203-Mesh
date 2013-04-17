@@ -254,7 +254,7 @@ void DVRPNetworkLayer::handleMessage(string sourceAddress, string destinationAdd
 
 				string shortestPathSerializedFinal = serializeShortestPaths(); // Figure out our most optimal paths right now
 				cout << "DIFF: {" << shortestPathSerializedInitial << "} WITH: {" << shortestPathSerializedFinal << "}\n";	
-				if(shortestPathSerializedInitial != shortestPathSerializedFinal || vectorIsMissingRoute(routingVector)){ // If the routing vector we received actually caused us to find a shorter path to a destination
+				if(shortestPathSerializedInitial != shortestPathSerializedFinal){ // If the routing vector we received actually caused us to find a shorter path to a destination
 					cout << "FOUND THEM TO BE DIFFERENT SO WE ARE ADVERTISING AGAIN!\n";
 					advertiseRoutingTable();
 				}
