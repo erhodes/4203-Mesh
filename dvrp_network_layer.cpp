@@ -112,16 +112,7 @@ void DVRPNetworkLayer::updateRoutingTable(string routingVector, string source){
 				routingTable->newRoute(destination, source, distance + 1);
         //    }
 		}
-        /*
-        for(each destination in our current routing table with direction B){
-
-                if(routingVector does not have a route to the destination){
-                    routingTable->deleteRoute(destination, source);
-                }
-
-        }
-        */
-
+        
 	}
 		
 }
