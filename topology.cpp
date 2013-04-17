@@ -72,7 +72,7 @@ int main(int argc, char ** argv){
 		}else if(topology == 2){
 			blacklist(&topologyFile, "dcf");
 		}else if(topology == 3){
-			blacklist(&topologyFile, "d")
+			blacklist(&topologyFile, "d");
 		}
 	}else if(mac == C){
 		if(topology == 1){
