@@ -135,7 +135,8 @@ void DVRPNetworkLayer::advertiseRoutingTable(){
 
 	vector <string> neighbours = neighbourDiscovery->getAddresses();
 	for(string &currentDestinationAddress: neighbours){
-		string routingVector = serializeShortestPathsForDestination(currentDestinationAddress);
+        //string routingVector = serializeShortestPathsForDestination(currentDestinationAddress);
+        string routingVector = serializeShortestPaths();
 		RoutingPacket routingTablePacket(0, 5, myAddress, currentDestinationAddress, routingVector); // Construct the packet data
 		string packetData = routingTablePacket.toString(); // Construct the packet data
 		sendRawData(currentDestinationAddress, packetData); // Send the packet data
