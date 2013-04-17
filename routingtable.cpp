@@ -23,8 +23,10 @@ void RoutingTable::newRoute(string destination, string direction, int distance){
             temp->insert(std::pair<string,int>(direction,distance));
         }
         else{
-            //the route already existed, so update it's distance
-            rowIterator->second = distance;
+            //the route already existed, so update it's distance if its better
+            if (rowIterator ->first > distance){
+                rowIterator->second = distance;
+            }
         }
     }
 }
